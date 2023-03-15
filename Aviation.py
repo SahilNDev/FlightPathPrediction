@@ -144,7 +144,7 @@ def scraping_function(url, s_elevation, e_elevation):
 
 def main_function(airport1, airport2):
 
-    airports = pd.read_csv("in-airports.csv")
+    airports = pd.read_csv("https://raw.githubusercontent.com/SahilNDev/FlightPathPrediction/main/in-airports.csv")
 
     main_url = "https://uk.flightaware.com"
     url_extract = requests.get(main_url + "/live/findflight?origin={}&destination={}".format(airport1, airport2)).text
