@@ -1,5 +1,3 @@
-from dash import Dash, dcc, html, Input, Output, State
-import dash_bootstrap_components as dbc
 from bs4 import BeautifulSoup
 import requests, re
 import pandas as pd
