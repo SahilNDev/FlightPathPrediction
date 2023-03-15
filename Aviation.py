@@ -182,6 +182,7 @@ def main_function(airport1, airport2):
                 os.mkdir(path)
                 for i in range(5):
                     scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
+                st.write(os.listdir(os.getcwd()))
                 return "CSV's have been created"
                 break
             else:
