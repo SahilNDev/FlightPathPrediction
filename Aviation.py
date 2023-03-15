@@ -38,9 +38,6 @@ def get_point_at_distance(lat1, lon1, alt1, d, bearing, tilt, R=6371):
     return (degrees(lat2), degrees(lon2), alt2, )
 
 def scraping_function(url, s_elevation, e_elevation):
-    
-    st.write(url)
-
     url_extract = requests.get(url).text
     soup = BeautifulSoup(url_extract, 'lxml')
     table = soup.find('table', class_ = "prettyTable fullWidth")
@@ -143,7 +140,7 @@ def scraping_function(url, s_elevation, e_elevation):
 
 def main_function(airport1, airport2):
 
-    airports = pd.read_csv("https://raw.githubusercontent.com/SahilNDev/FlightPathPrediction/main/in-airports.csv")
+    airports = pd.read_csv("in-airports.csv")
 
     main_url = "https://uk.flightaware.com"
     url_extract = requests.get(main_url + "/live/findflight?origin={}&destination={}".format(airport1, airport2)).text
@@ -180,6 +177,7 @@ def main_function(airport1, airport2):
                 if os.path.exists(path):
                     shutil.rmtree(path)
                 os.mkdir(path)
+                st.write(os.listdir(os.getcwd()))
                 for i in range(5):
                     scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
                 st.write(os.listdir(os.getcwd()))
