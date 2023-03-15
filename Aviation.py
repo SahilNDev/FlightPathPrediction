@@ -173,9 +173,12 @@ def main_function(airport1, airport2):
             elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
             elevation2 = airports[airports['gps_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
             if len(flight_links) == 5:
-                path = os.getcwd()
-                if os.path.exists(path):
-                    shutil.rmtree(path)
+                files = os.listdir(os.getcwd())
+                for i in files:
+                    try:
+                        os.remove(os.getcwd() + i)
+                    except Exception:
+                        continue
                 os.mkdir(path)
                 st.write(os.listdir(os.getcwd()))
                 for i in range(5):
