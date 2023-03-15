@@ -172,14 +172,14 @@ def main_function(airport1, airport2):
             elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
             elevation2 = airports[airports['gps_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
             if len(flight_links) == 5:                
-                path = os.getcwd() + '\Datasets'
+                path = os.getcwd() + '/Datasets'
                 if os.path.exists(path):
                     st.write("guyefhsi")
                 st.write(os.listdir(os.getcwd()))
                 files = os.listdir(path)
                 for i in files:
                     try:
-                        os.remove(path + r'\{}'.format(i))
+                        os.remove(path + r'/{}'.format(i))
                     except Exception:
                         continue
                 st.write(os.listdir(path))
