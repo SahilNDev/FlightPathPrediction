@@ -176,13 +176,6 @@ def main_function(airport1, airport2):
                 if os.path.exists(path):
                     st.write("guyefhsi")
                 st.write(os.listdir(os.getcwd()))
-                files = os.listdir(path)
-                for i in files:
-                    try:
-                        os.remove(path + r'/{}'.format(i))
-                    except Exception:
-                        continue
-                st.write(os.listdir(path))
                 for i in range(5):
                     scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
                 st.write(os.listdir(path))
