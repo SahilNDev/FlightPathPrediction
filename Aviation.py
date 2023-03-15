@@ -174,6 +174,7 @@ def main_function(airport1, airport2):
             elevation2 = airports[airports['gps_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
             if len(flight_links) == 5:
                 path = os.path.join(os.getcwd(), r'/Datasets')
+                os.mkdir(path)
                 st.write(os.listdir(path))
                 for i in range(5):
                     scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
