@@ -38,6 +38,8 @@ def get_point_at_distance(lat1, lon1, alt1, d, bearing, tilt, R=6371):
     return (degrees(lat2), degrees(lon2), alt2, )
 
 def scraping_function(url, s_elevation, e_elevation):
+    
+    st.write(url)
 
     url_extract = requests.get(url).text
     soup = BeautifulSoup(url_extract, 'lxml')
