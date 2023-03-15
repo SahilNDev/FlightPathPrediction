@@ -138,6 +138,8 @@ def scraping_function(url, s_elevation, e_elevation):
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
     st.plotly_chart(fig, use_container_width = True)
     
+    df.to_csv("{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
+    
 
 def main_function(airport1, airport2):
 
