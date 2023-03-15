@@ -176,7 +176,7 @@ def main_function(airport1, airport2):
                 files = os.listdir(path)
                 for i in files:
                     if "csv" in i:
-                        os.remove(path + r'/{}'.format(i)
+                        os.remove(path + r'/{}'.format(i))
                 st.write(os.listdir(path))
                 for i in range(5):
                     scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
