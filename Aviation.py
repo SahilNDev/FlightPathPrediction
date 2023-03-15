@@ -176,13 +176,13 @@ def main_function(airport1, airport2):
                 files = os.listdir(os.getcwd())
                 for i in files:
                     try:
-                        os.remove(os.getcwd() + i)
+                        os.remove(os.getcwd() + r'/{}'.format(i))
                     except Exception:
                         continue
                 st.write(os.listdir(os.getcwd()))
                 for i in range(5):
                     scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
-                st.write(os.listdir(os.getcwd() + r'\Datasets'))
+                st.write(os.listdir(os.getcwd() + r'/Datasets'))
                 return "CSV's have been created"
                 break
             else:
