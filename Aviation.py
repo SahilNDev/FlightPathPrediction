@@ -173,16 +173,11 @@ def main_function(airport1, airport2):
             elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
             elevation2 = airports[airports['gps_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
             if len(flight_links) == 5:
-                files = os.listdir(os.getcwd())
-                for i in files:
-                    try:
-                        os.remove(os.getcwd() + r'/{}'.format(i))
-                    except Exception:
-                        continue
-                st.write(os.listdir(os.getcwd()))
+                path = os.path.join(os.getcwd(), r'/Datasets)
+                st.write(os.listdir(path))
                 for i in range(5):
                     scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
-                st.write(os.listdir(os.getcwd() + r'/Datasets'))
+                st.write(os.listdir(path))
                 return "CSV's have been created"
                 break
             else:
