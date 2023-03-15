@@ -135,9 +135,8 @@ def scraping_function(url, s_elevation, e_elevation):
         lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][n-1], df['Longitude'][n-1],  df['meters'][n-1], d/1000, df['Course'][n-1], 0)
         df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], (df['m/s'][n-1]-deceleration)*9/4, alt2, df['Rate'][n-1], '', 1, df['m/s'][n-1]-deceleration, d, 0]
 
-    pio.renderers.default = "browser"
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
-    fig.show()
+    st.plotly_chart(fig, use_container_width = True)
     
 
 def main_function(airport1, airport2):
