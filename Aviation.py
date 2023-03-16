@@ -221,10 +221,10 @@ st.title("Predict Flight Path Between Two Places")
 col1, col2 = st.columns(2)
 
 with col1:
-    origin = st.selectbox('Origin: ', shuffle(list(df['Dispaly Name'])), index = 0)
+    origin = st.selectbox('Origin: ', shuffle([df['Dispaly Name']]), index = 0)
 
 with col2:
-    destination = st.selectbox('Destination: ', shuffle(list(df[df['Display Name']!=origin]['Display Name'])))
+    destination = st.selectbox('Destination: ', shuffle([(df[df['Display Name']!=origin]['Display Name']]))
     if st.button('Submit'):
         tk = 1
 
