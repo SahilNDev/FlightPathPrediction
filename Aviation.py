@@ -214,8 +214,6 @@ st.title("Predict Flight Path Between Two Places")
 
 col1, col2 = st.columns(2)
 
-df = df.sample(frac =  1)
-
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
 
