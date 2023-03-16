@@ -189,6 +189,12 @@ def main_function(airport1, airport2):
         st.write(e)
         return "No flights are there between {} and {}, please change the locations and try again.".format(airports[airports['gps_code']==airport1].reset_index()['municipality'][0], airports[airports['gps_code']==airport2].reset_index()['municipality'][0])
 
+def shuffle(list):
+    for i in range(len(list)):
+        j = random.randint(0, len(list)-1)
+        list[i], list[j] = list[j], list[i]
+    return list
+    
 df = pd.read_csv("in-airports.csv")
 
 import streamlit as st
@@ -215,10 +221,10 @@ st.title("Predict Flight Path Between Two Places")
 col1, col2 = st.columns(2)
 
 with col1:
-    origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
+    origin = st.selectbox('Origin: ', shuffle(list(df['Dispaly Name'])), index = 0)
 
 with col2:
-    destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
+    destination = st.selectbox('Destination: ', shuffle(list(df[df['Display Name']!=origin]['Display Name'])))
     if st.button('Submit'):
         tk = 1
 
