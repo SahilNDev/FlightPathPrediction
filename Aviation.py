@@ -230,4 +230,4 @@ if tk == 1:
     for file in os.listdir(os.getcwd() + '/Datasets'):
         if 'csv' in file:
             with open(r'Datasets/{}'.format(file)) as f:
-                st.download_button('Download CSV', f, file_name = "{}".format(file), )
+                st.download_button('Download CSV', f, file_name = "{}".format(file), on_click = True)
