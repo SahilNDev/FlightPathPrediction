@@ -6,6 +6,7 @@ import plotly.io as pio
 import plotly.express as px
 import random
 import os
+import subprocess
 
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
@@ -228,8 +229,8 @@ if tk == 1:
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     st.write(main_function(x, y))
     os.chdir(os.path.join(os.getcwd(), 'Datasets'))
-    os.system("git init")
-    os.system("git remote https://github.com/SahilNDev/FlightPathPrediction.git")
-    os.system("git add *")
-    os.system('git commit -m "CSVs"')
-    os.system('git push origin main')
+    subprocess.run("git init")
+    subprocess.run("git remote https://github.com/SahilNDev/FlightPathPrediction.git")
+    subprocess.run("git add *")
+    subprocess.run('git commit -m "CSVs"')
+    subprocess.run('git push origin main')
