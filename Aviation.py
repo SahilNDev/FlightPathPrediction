@@ -136,6 +136,7 @@ def scraping_function(url, s_elevation, e_elevation):
     
     df.to_csv(r"Datasets/{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
     
+    
 
 def main_function(airport1, airport2):
 
@@ -228,5 +229,5 @@ if tk == 1:
     st.write(main_function(x, y))
     for file in os.listdir(os.getcwd() + '/Datasets'):
         if 'csv' in file:
-            with open(r'/Datasets/{}'.format(file)) as f:
+            with open(r'Datasets/{}'.format(file)) as f:
                 st.download_button('Downlaod CSV', f)
