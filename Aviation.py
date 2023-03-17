@@ -228,9 +228,12 @@ if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     st.write(main_function(x, y))
+    x = os.getcwd()
     os.chdir(os.path.join(os.getcwd(), 'Datasets'))
+    os.path.dirname(os.getcwd())
     subprocess.run("git init")
     subprocess.run("git remote https://github.com/SahilNDev/FlightPathPrediction.git")
     subprocess.run("git add *")
     subprocess.run('git commit -m "CSVs"')
     subprocess.run('git push origin main')
+    os.chdir(x)
