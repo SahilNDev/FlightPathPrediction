@@ -205,7 +205,7 @@ def main_function(airport1, airport2):
                 for i in files1:
                     if "kml" in i:
                         os.remove(path1 + r'/{}'.format(i))
-                st.write(path1)
+                st.write(os.listdir(path1))
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
                     convertingToKML(file)
