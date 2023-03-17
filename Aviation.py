@@ -226,7 +226,7 @@ if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     st.write(main_function(x, y))
-    for file in os.listdr(os.getcwd() + r'\Datasets')):
+    for file in os.listdr(os.getcwd() + r'\Datasets'):
         if 'csv' in file:
             with open(file) as f:
                 st.download_button('Downlaod CSV', f)
