@@ -210,7 +210,6 @@ def main_function(airport1, airport2):
     except Exception:
         return "No flights are there between {} and {}, please change the locations and try again.".format(airports[airports['gps_code']==airport1].reset_index()['municipality'][0], airports[airports['gps_code']==airport2].reset_index()['municipality'][0])
     
-os.chdir("/app/flightpathprediction")
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
     st.markdown(
