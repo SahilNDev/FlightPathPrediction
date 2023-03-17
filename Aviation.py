@@ -215,7 +215,8 @@ def main_function(airport1, airport2):
                 break
             else:
                 set1.remove(flight)
-    except Exception:
+    except Exception as e:
+	st.write(e)
         return "No flights are there between {} and {}, please change the locations and try again.".format(airports[airports['gps_code']==airport1].reset_index()['municipality'][0], airports[airports['gps_code']==airport2].reset_index()['municipality'][0])
     
 df = pd.read_csv("in-airports.csv")
