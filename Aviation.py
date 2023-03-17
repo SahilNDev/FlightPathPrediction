@@ -200,7 +200,7 @@ def main_function(airport1, airport2):
                     if "csv" in i:
                         os.remove(path + r'/{}'.format(i))
                 st.write(os.listdir(path))
-                path1 = os.getcwd() + 'KML-Files'
+                path1 = os.getcwd() + '/KML-Files'
                 files1 = os.listdir(path1)
                 for i in files1:
                     if "kml" in i:
