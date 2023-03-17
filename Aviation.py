@@ -6,6 +6,7 @@ import plotly.io as pio
 import plotly.express as px
 import random
 import os
+from shutil import make_archive
 
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
@@ -227,6 +228,8 @@ if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     st.write(main_function(x, y))
+    make_archive('/Datasets','zip')
+    st.write(os.listdir(os.getcwd()))
     for file in os.listdir(os.getcwd() + '/Datasets'):
         if 'csv' in file:
             with open(r'Datasets/{}'.format(file)) as f:
