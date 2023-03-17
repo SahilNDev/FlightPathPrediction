@@ -8,7 +8,9 @@ import random
 import os
 import subprocess
 import streamlit as st
+import csv
 
+def convertingToKML(
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
 
@@ -137,6 +139,7 @@ def scraping_function(url, s_elevation, e_elevation):
     st.plotly_chart(fig, use_container_width = True)
     
     df.to_csv(r"Datasets/{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
+    return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     
     
 
@@ -181,8 +184,10 @@ def main_function(airport1, airport2):
                     if "csv" in i:
                         os.remove(path + r'/{}'.format(i))
                 st.write(os.listdir(path))
+                names = []
                 for i in range(5):
-                    scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
+                    names.append(scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2))
+                    st.write(names)
                 st.write(os.listdir(path))
                 return "CSV's have been created"
                 break
@@ -230,11 +235,4 @@ if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     st.write(main_function(x, y))
-    x = os.getcwd()
-    os.chdir(os.path.join(os.getcwd(), 'Datasets'))
-    os.system("git init")
-    os.system("git remote https://github.com/SahilNDev/FlightPathPrediction.git")
-    os.system("git add *")
-    os.system('git commit -m "CSVs"')
-    os.system('git push origin main')
-    os.chdir(x)
+    
