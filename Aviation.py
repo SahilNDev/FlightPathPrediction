@@ -191,8 +191,6 @@ def main_function(airport1, airport2):
     except Exception:
         return "No flights are there between {} and {}, please change the locations and try again.".format(airports[airports['gps_code']==airport1].reset_index()['municipality'][0], airports[airports['gps_code']==airport2].reset_index()['municipality'][0])
 
-st.write(os.getcwd())    
-os.chdir(os.getcwd() + r"app/flightpathprediction")
 df = pd.read_csv("in-airports.csv")
 
 
@@ -232,7 +230,6 @@ if tk == 1:
     st.write(main_function(x, y))
     x = os.getcwd()
     os.chdir(os.path.join(os.getcwd(), 'Datasets'))
-    st.write(os.path.dirname(os.getcwd()))
     subprocess.run("git init")
     subprocess.run("git remote https://github.com/SahilNDev/FlightPathPrediction.git")
     subprocess.run("git add *")
