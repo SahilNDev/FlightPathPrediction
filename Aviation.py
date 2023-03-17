@@ -228,5 +228,5 @@ if tk == 1:
     st.write(main_function(x, y))
     for file in os.listdir(os.getcwd() + '/Datasets'):
         if 'csv' in file:
-            with open(file) as f:
+            with open(r'Datasets\{}'.format(file)) as f:
                 st.download_button('Downlaod CSV', f)
