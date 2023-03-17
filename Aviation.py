@@ -7,6 +7,7 @@ import plotly.express as px
 import random
 import os
 import subprocess
+import streamlit as st
 
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
@@ -190,10 +191,10 @@ def main_function(airport1, airport2):
     except Exception:
         return "No flights are there between {} and {}, please change the locations and try again.".format(airports[airports['gps_code']==airport1].reset_index()['municipality'][0], airports[airports['gps_code']==airport2].reset_index()['municipality'][0])
 
-
+st.write(os.path.dirname(os.getcwd()))
 df = pd.read_csv("in-airports.csv")
 
-import streamlit as st
+
 
 def add_bg_from_url():
     st.markdown(
@@ -230,7 +231,7 @@ if tk == 1:
     st.write(main_function(x, y))
     x = os.getcwd()
     os.chdir(os.path.join(os.getcwd(), 'Datasets'))
-    os.path.dirname(os.getcwd())
+    st.write(os.path.dirname(os.getcwd()))
     subprocess.run("git init")
     subprocess.run("git remote https://github.com/SahilNDev/FlightPathPrediction.git")
     subprocess.run("git add *")
