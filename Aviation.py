@@ -10,7 +10,42 @@ import subprocess
 import streamlit as st
 import csv
 
-def convertingToKML(
+def convertingToKML(file):
+    f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
+    reader = csv.reader(f1)
+    
+    f2 = open(r"KML-Files/{}.kml".format(file),'w')
+    f2.write("""<?xml version="1.0" encoding="UTF-8"?>
+	    <kml xmlns="http://www.opengis.net/kml/2.2"
+  	    xmlns:gx="http://www.google.com/kml/ext/2.2">
+	    <name>Chennai to Delhi</name>    
+		    <gx:Tour>
+	        <name>Chennai to Delhi</name>
+	   		    <gx:Playlist>\n""")
+    x = 0
+    for row in reader:
+	    if x == 0:
+		    x = 1
+
+	    else:
+		    f2.write(f"""				  <gx:FlyTo>
+				            <gx:duration>{float(row[9])/20.0}</gx:duration>
+				            <gx:flyToMode>smooth</gx:flyToMode>
+			    	        <Camera>
+			        	    <longitude>{row[2]}</longitude>
+			        	    <latitude>{row[1]}</latitude>
+			        	    <altitude>{row[6]}</altitude>
+			        	    <heading>{row[3]}</heading>
+			          	    <tilt>{90.00 + float(row[12])}</tilt>
+						    <roll>0</roll>
+			        	    <altitudeMode>absolute</altitudeMode>
+			    	        </Camera>
+			    	    </gx:FlyTo>\n""")
+    f2.write("""		  </gx:Playlist>
+	  	    </gx:Tour></kml>""")
+    f1.close()
+    f2.close()
+    
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
 
@@ -184,12 +219,18 @@ def main_function(airport1, airport2):
                     if "csv" in i:
                         os.remove(path + r'/{}'.format(i))
                 st.write(os.listdir(path))
-                names = []
+                path1 = os.getcwd() + 'KML-Files'
+                files1 = os.listdir(path1)
+                for i in files1:
+                    if "kml" in i:
+                        os.remove(path1 + r'/{}'.format(i))
+                st.write(path1)
                 for i in range(5):
-                    names.append(scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2))
-                    st.write(names)
+                    file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
+                    convertingToKML(file)
                 st.write(os.listdir(path))
-                return "CSV's have been created"
+                st.write(os.listdir(path1))
+                return "CSV's and KML's have been created"
                 break
             else:
                 set1.remove(flight)
