@@ -8,6 +8,7 @@ import random
 import os
 import streamlit as st
 import csv
+import webbrowser
 
 def convertingToKML(file):
     f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
@@ -211,6 +212,10 @@ def main_function(airport1, airport2):
                     convertingToKML(file)
                 st.write(os.listdir(path))
                 st.write(os.listdir(path1))
+		files1 = os.listdir(path1)
+		for i in files1:
+		    if "kml" in i:
+			webbrowser.run(path1 + r"/{}".format(i))
                 return "CSV's and KML's have been created"
                 break
             else:
