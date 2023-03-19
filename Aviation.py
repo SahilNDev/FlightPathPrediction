@@ -214,8 +214,8 @@ def main_function(airport1, airport2):
                 st.write(os.listdir(path1))
 		files1 = os.listdir(path1)
 		for i in files1:
-		    if "kml" in i:
-			webbrowser.run(path1 + r"/{}".format(i))
+			if "kml" in i:
+				webbrowser.run(path1 + r"/{}".format(i))
                 return "CSV's and KML's have been created"
                 break
             else:
