@@ -12,8 +12,7 @@ import webbrowser
 
 def convertingToKML(file):
     f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
-    reader = csv.reader(f1)
-
+    reader = csv.reader(f1)[1:]
     f2 = open(r"KML-Files/{}.kml".format(file),'w')
     f2.write("""<?xml version="1.0" encoding="UTF-8"?>
 	    <kml xmlns="http://www.opengis.net/kml/2.2"
@@ -24,31 +23,26 @@ def convertingToKML(file):
 	   		    <gx:Playlist>\n""")
     x = 0
     for row in reader:
-	    if x == 0:
-		    x = 1
+        f2.write(f"""				  <gx:FlyTo>
+				        <gx:duration>{float(row[9])/20.0}</gx:duration>
+				        <gx:flyToMode>smooth</gx:flyToMode>
+			    	    <Camera>
+			        	<longitude>{row[2]}</longitude>
+			        	<latitude>{row[1]}</latitude>
+			        	<altitude>{row[6]}</altitude>
+			        	<heading>{row[3]}</heading>
+			          	<tilt>{90.00 + float(row[12])}</tilt>
+						<roll>0</roll>
+			        	<altitudeMode>absolute</altitudeMode>
+			    	    </Camera>
+			    	</gx:FlyTo>\n""")
 
-	    else:
-		    f2.write(f"""				  <gx:FlyTo>
-				            <gx:duration>{float(row[9])/20.0}</gx:duration>
-				            <gx:flyToMode>smooth</gx:flyToMode>
-			    	        <Camera>
-			        	    <longitude>{row[2]}</longitude>
-			        	    <latitude>{row[1]}</latitude>
-			        	    <altitude>{row[6]}</altitude>
-			        	    <heading>{row[3]}</heading>
-			          	    <tilt>{90.00 + float(row[12])}</tilt>
-						    <roll>0</roll>
-			        	    <altitudeMode>absolute</altitudeMode>
-			    	        </Camera>
-			    	    </gx:FlyTo>\n""")
     f2.write("""		  </gx:Playlist>
 	  	    </gx:Tour></kml>""")
     f1.close()
     f2.close()
-
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
-
 def mph_to_mps(speed):
     return speed*4/9
 def tilt_calculator(d, met1, met2):
@@ -212,12 +206,10 @@ def main_function(airport1, airport2):
                     convertingToKML(file)
                 st.write(os.listdir(path))
                 st.write(os.listdir(path1))
-				files1 = os.listdir(path1)
-				for i in files1:
-				if "kml" in i:
-					webbrowser.run(path1 + r"/{}".format(i))
+                for i in files1:
+                    if "kml" in i:
+                        webbrowser.run(path1 + r'/{}'.format(i))
                 return "CSV's and KML's have been created"
-                break
             else:
                 set1.remove(flight)
     except Exception as e:
