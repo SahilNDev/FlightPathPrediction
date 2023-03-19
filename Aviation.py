@@ -23,19 +23,23 @@ def convertingToKML(file):
 	   		    <gx:Playlist>\n""")
     x = 0
     for row in reader:
-        f2.write(f"""				  <gx:FlyTo>
-				        <gx:duration>{float(row[9])/20.0}</gx:duration>
-				        <gx:flyToMode>smooth</gx:flyToMode>
-			    	    <Camera>
-			        	<longitude>{row[2]}</longitude>
-			        	<latitude>{row[1]}</latitude>
-			        	<altitude>{row[6]}</altitude>
-			        	<heading>{row[3]}</heading>
-			          	<tilt>{90.00 + float(row[12])}</tilt>
-						<roll>0</roll>
-			        	<altitudeMode>absolute</altitudeMode>
-			    	    </Camera>
-			    	</gx:FlyTo>\n""")
+        if x == 0:
+            x = 1
+        
+        else:
+            f2.write(f"""				  <gx:FlyTo>
+			    	        <gx:duration>{float(row[9])/20.0}</gx:duration>
+				            <gx:flyToMode>smooth</gx:flyToMode>
+			    	        <Camera>
+			        	    <longitude>{row[2]}</longitude>
+			        	    <latitude>{row[1]}</latitude>
+			        	    <altitude>{row[6]}</altitude>
+			        	    <heading>{row[3]}</heading>
+			          	    <tilt>{90.00 + float(row[12])}</tilt>
+						    <roll>0</roll>
+			        	    <altitudeMode>absolute</altitudeMode>
+			    	        </Camera>
+			    	    </gx:FlyTo>\n""")
 
     f2.write("""		  </gx:Playlist>
 	  	    </gx:Tour></kml>""")
