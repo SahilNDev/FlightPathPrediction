@@ -213,7 +213,7 @@ def main_function(airport1, airport2):
                 files1 = os.listdir(path1)
                 for i in files1:
                     if "kml" in i:
-                        webbrowser.open(path1 + r'/{}'.format(i))
+                        os.system(path1 + "googleearth.exe" + path1 + r'/{}'.format(i))
                 return "CSV's and KML's have been created"
             else:
                 set1.remove(flight)
