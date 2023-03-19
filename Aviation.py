@@ -12,7 +12,7 @@ import webbrowser
 
 def convertingToKML(file):
     f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
-    reader = csv.reader(f1)[1:]
+    reader = csv.reader(f1)
     f2 = open(r"KML-Files/{}.kml".format(file),'w')
     f2.write("""<?xml version="1.0" encoding="UTF-8"?>
 	    <kml xmlns="http://www.opengis.net/kml/2.2"
