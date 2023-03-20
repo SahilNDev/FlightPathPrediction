@@ -41,7 +41,7 @@ def create_dataset(dataset, look_back, look_ahead):
     return np.array(X), np.array(Y)
 
 def model_implementation():
-    csvs = glob(r'Datasets/*.csv')
+    csvs = glob('\Datasets\*.csv')
     csv_list = [csv[:-5] for csv in csvs]
     st.write(csv_list)
     csv_list.sort()
