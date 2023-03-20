@@ -76,7 +76,7 @@ def model_implementation():
             df['second'] = df['date_time'].apply(lambda x: x.second)
 
     predicted_df = pd.DataFrame()
-    units = ['Latitude','Longitude','Altitude']
+    units = ['Latitude','Longitude','meters']
     for i in units:    
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
         for df in dataframelist[1:]:
