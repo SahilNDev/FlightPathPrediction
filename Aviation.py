@@ -43,7 +43,6 @@ def create_dataset(dataset, look_back, look_ahead):
 def model_implementation():
     path = os.getcwd() + '/Datasets'
     files = os.listdir(path)
-    st.write(files)
     dataframelist = []
     for i in files:
         if "csv" in i:
@@ -61,7 +60,6 @@ def model_implementation():
                 else:
                     df_new['date_time'][j] = str(int(i[:2]) + 1) + i[2:-4] + daylist[j][3:]
             dataframelist.append(df_new)
-    st.write(dataframelist)
     for df in dataframelist:
         df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
         count1 = df['date_time'].first_valid_index()
@@ -75,7 +73,6 @@ def model_implementation():
             df['minute'] = df['date_time'].apply(lambda x: x.minute)
             df['second'] = df['date_time'].apply(lambda x: x.second)
 
-    predicted_df = pd.DataFrame()
     units = ['Latitude','Longitude','meters']
     for i in units:    
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
@@ -118,7 +115,6 @@ def model_implementation():
         Y_train = scaler.inverse_transform([Y_train])
         test_predict = scaler.inverse_transform(test_predict)
         Y_test = scaler.inverse_transform([Y_test])
-        st.write(test_predict)
         st.write(f'Train Mean Absolute Error for {i}:', mean_absolute_error(Y_train[0], train_predict[:,0]))
         st.write(f'Train Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0])))
         st.write(f'Test Mean Absolute Error for {i}:', mean_absolute_error(Y_test[0], test_predict[:,0]))
