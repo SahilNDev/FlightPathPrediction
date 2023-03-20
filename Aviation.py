@@ -9,30 +9,30 @@ import os
 import streamlit as st
 import csv
 import webbrowser
-# import numpy as np
-# import matplotlib.pyplot as plt
-# import pandas as pd
-# pd.set_option('display.float_format', lambda x: '%.4f' % x)
-# import seaborn as sns
-# sns.set_context("paper", font_scale=1.3)
-# sns.set_style('white')
-# import warnings
-# warnings.filterwarnings('ignore')
-# from time import time
-# import matplotlib.ticker as tkr
-# from scipy import stats
-# from statsmodels.tsa.stattools import adfuller
-# from sklearn import preprocessing
-# from statsmodels.tsa.stattools import pacf
-# import math
-# import keras
-# from keras.models import Sequential
-# from keras.layers import Dense, LSTM, Dropout
-# from keras.layers import *
-# from sklearn.preprocessing import MinMaxScaler
-# from sklearn.metrics import mean_squared_error, mean_absolute_error
-# from keras.callbacks import EarlyStopping
-# from glob import glob
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+pd.set_option('display.float_format', lambda x: '%.4f' % x)
+import seaborn as sns
+sns.set_context("paper", font_scale=1.3)
+sns.set_style('white')
+import warnings
+warnings.filterwarnings('ignore')
+from time import time
+import matplotlib.ticker as tkr
+from scipy import stats
+from statsmodels.tsa.stattools import adfuller
+from sklearn import preprocessing
+from statsmodels.tsa.stattools import pacf
+import math
+import keras
+from keras.models import Sequential
+from keras.layers import Dense, LSTM, Dropout
+from keras.layers import *
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+from keras.callbacks import EarlyStopping
+from glob import glob
 
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
@@ -66,6 +66,7 @@ def model_implementation():
                 df_new['date_time'][j] = str(int(i[9:11]) + 1) + i[11:] + daylist[j][3:]
         dataframelist.append(df_new)
 
+    predicted_df = pd.Dataframe()
     units = ['Latitude','Longitude','Altitude']
     for i in units:    
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
@@ -73,7 +74,6 @@ def model_implementation():
             df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second']]
             df_update = pd.concat([df_update, df_lat], axis=0)
 
-            stat, p = stats.normaltest(df_update.Latitude)
 
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
@@ -109,8 +109,32 @@ def model_implementation():
         Y_train = scaler.inverse_transform([Y_train])
         test_predict = scaler.inverse_transform(test_predict)
         Y_test = scaler.inverse_transform([Y_test])
-    
+        st.write(f'Train Mean Absolute Error for {i}:', mean_absolute_error(Y_train[0], train_predict[:,0]))
+        st.write(f'Train Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0])))
+        st.write(f'Test Mean Absolute Error for {i}:', mean_absolute_error(Y_test[0], test_predict[:,0]))
+        st.write(f'Test Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_test[0], test_predict[:,0])))
 
+        fig = plt.figure(figsize=(8,4))
+        fig.plot(history.history['loss'], label='Train Loss')
+        fig.plot(history.history['val_loss'], label='Test Loss')
+        fig.title('model loss')
+        fig.ylabel('loss')
+        fig.xlabel('epochs')
+        fig.legend(loc='upper right')
+        st.pyplot(fig)
+
+        aa=[x for x in range(Y_test.shape[1])]
+        fig1 = plt.figure(figsize=(8,4))
+        fig1.plot(aa, Y_test[0][:], marker='.', label="actual")
+        fig1.plot(aa, test_predict[:,0][:], 'r', label="prediction")
+        # plt.tick_params(left=False, labelleft=True) #remove ticks
+        fig1.tight_layout()
+        sns.despine(top=True)
+        fig1.subplots_adjust(left=0.07)
+        fig1.ylabel('Latitude', size=15)
+        fig1.xlabel('Time step', size=15)
+        fig1.legend(fontsize=10)
+        st.pyplot(fig1)
 
 
 def convertingToKML(file):
@@ -351,3 +375,4 @@ if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     st.write(main_function(x, y))
+    model_implementation()
