@@ -1,1 +1,1 @@
-This is the folder for to store csvs
+This is the folder to store CSVs temporarily.
