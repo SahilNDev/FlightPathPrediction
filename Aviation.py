@@ -60,6 +60,7 @@ def model_implementation():
                     df_new['date_time'][j] = i[9:] + daylist[j][3:]
                 else:
                     df_new['date_time'][j] = str(int(i[9:11]) + 1) + i[11:] + daylist[j][3:]
+            dataframelist.append(df_new)
     st.write(dataframelist)
     for df in dataframelist:
         df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
