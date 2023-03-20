@@ -125,25 +125,25 @@ def model_implementation():
         st.write(f'Test Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_test[0], test_predict[:,0])))
 
         fig = plt.figure(figsize=(8,4))
-        fig.plot(history.history['loss'], label='Train Loss')
-        fig.plot(history.history['val_loss'], label='Test Loss')
-        fig.title('model loss')
-        fig.ylabel('loss')
-        fig.xlabel('epochs')
-        fig.legend(loc='upper right')
+        plt.plot(history.history['loss'], label='Train Loss')
+        plt.plot(history.history['val_loss'], label='Test Loss')
+        plt.title('model loss')
+        plt.ylabel('loss')
+        plt.xlabel('epochs')
+        plt.legend(loc='upper right')
         st.pyplot(fig)
 
         aa=[x for x in range(Y_test.shape[1])]
         fig1 = plt.figure(figsize=(8,4))
-        fig1.plot(aa, Y_test[0][:], marker='.', label="actual")
-        fig1.plot(aa, test_predict[:,0][:], 'r', label="prediction")
+        plt.plot(aa, Y_test[0][:], marker='.', label="actual")
+        plt.plot(aa, test_predict[:,0][:], 'r', label="prediction")
         # plt.tick_params(left=False, labelleft=True) #remove ticks
-        fig1.tight_layout()
+        plt.tight_layout()
         sns.despine(top=True)
-        fig1.subplots_adjust(left=0.07)
-        fig1.ylabel('Latitude', size=15)
-        fig1.xlabel('Time step', size=15)
-        fig1.legend(fontsize=10)
+        plt.subplots_adjust(left=0.07)
+        plt.ylabel('Latitude', size=15)
+        plt.xlabel('Time step', size=15)
+        plt.legend(fontsize=10)
         st.pyplot(fig1)
 
 
