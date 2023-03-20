@@ -46,6 +46,7 @@ def model_implementation():
     for i in files:
         if "csv" in i:
             df_new = pd.read_csv(r'Datasets/{}'.format(i))
+            st.write(df_new)
             df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
             daylist = np.array(df_new['Time (IST)'])
             strday = daylist[0][:3]
