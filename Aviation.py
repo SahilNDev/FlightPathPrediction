@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests, re
-import pandas as pd
 from math import asin, atan2, cos, degrees, radians, sin
 import plotly.io as pio
 import plotly.express as px
@@ -8,7 +7,6 @@ import random
 import os
 import streamlit as st
 import csv
-import webbrowser
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -325,22 +323,14 @@ def main_function(airport1, airport2):
                 for i in files:
                     if "csv" in i:
                         os.remove(path + r'/{}'.format(i))
-                st.write(os.listdir(path))
                 path1 = os.getcwd() + '/KML-Files'
                 files1 = os.listdir(path1)
                 for i in files1:
                     if "kml" in i:
                         os.remove(path1 + r'/{}'.format(i))
-                st.write(os.listdir(path1))
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
                     convertingToKML(file)
-                st.write(os.listdir(path))
-                st.write(os.listdir(path1))
-                files1 = os.listdir(path1)
-                for i in files1:
-                    if "kml" in i:
-                        webbrowser.run(path1 + r'/{}'.format(i))
                 return "CSV's and KML's have been created"
             else:
                 set1.remove(flight)
