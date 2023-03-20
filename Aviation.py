@@ -9,6 +9,109 @@ import os
 import streamlit as st
 import csv
 import webbrowser
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import pandas as pd
+# pd.set_option('display.float_format', lambda x: '%.4f' % x)
+# import seaborn as sns
+# sns.set_context("paper", font_scale=1.3)
+# sns.set_style('white')
+# import warnings
+# warnings.filterwarnings('ignore')
+# from time import time
+# import matplotlib.ticker as tkr
+# from scipy import stats
+# from statsmodels.tsa.stattools import adfuller
+# from sklearn import preprocessing
+# from statsmodels.tsa.stattools import pacf
+# import math
+# import keras
+# from keras.models import Sequential
+# from keras.layers import Dense, LSTM, Dropout
+# from keras.layers import *
+# from sklearn.preprocessing import MinMaxScaler
+# from sklearn.metrics import mean_squared_error, mean_absolute_error
+# from keras.callbacks import EarlyStopping
+# from glob import glob
+
+def create_dataset(dataset, look_back, look_ahead):
+    X, Y = [], []
+    for i in range(len(dataset)-look_back-look_ahead):
+        a = dataset[i:(i+look_back), 0]
+        X.append(a)
+        Y.append(dataset[i + look_back + look_ahead - 1, 0])
+    return np.array(X), np.array(Y)
+
+def model_implementation():
+    csvs = glob('/Datasets/*.csv')
+    csv_list = [csv[:-5] for csv in csvs]
+    csv_list.sort()
+    datelist = []
+    for i in csv_list:
+        daynum = i[9:11]
+        datelist.append(int(daynum))
+
+    dataframelist = []
+    for i in csv_list:
+        df_new = pd.read_csv(i+'1.csv')
+        df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
+        daylist = np.array(df_new['Time (IST)'])
+        strday = daylist[0][:3]
+        df_new['date_time'] = ''
+        for j in range(df_new.shape[0]):
+            day2 = daylist[j][:3]
+            if(strday==day2):
+                df_new['date_time'][j] = i[9:] + daylist[j][3:]
+            else:
+                df_new['date_time'][j] = str(int(i[9:11]) + 1) + i[11:] + daylist[j][3:]
+        dataframelist.append(df_new)
+
+    units = ['Latitude','Longitude','Altitude']
+    for i in units:    
+        df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
+        for df in dataframelist[1:]:
+            df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second']]
+            df_update = pd.concat([df_update, df_lat], axis=0)
+
+            stat, p = stats.normaltest(df_update.Latitude)
+
+        dataset = df_update[i].values #numpy.ndarray
+        dataset = dataset.astype('float32')
+        dataset = np.reshape(dataset, (-1, 1))
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        dataset = scaler.fit_transform(dataset)
+        test_size = dataframelist[-1].shape[0]
+        train_size = len(dataset) - test_size
+        train, test = dataset[:train_size,:], dataset[train_size:,:]
+        look_back = 5
+        look_ahead = 1
+        X_train, Y_train = create_dataset(train, look_back, look_ahead)
+        X_test, Y_test = create_dataset(test, look_back, look_ahead)
+
+        # reshape input to be [samples, time steps, features]
+        X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
+        X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
+
+
+        model = Sequential()
+        model.add(LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2])))
+        model.add(Dropout(0.2))
+        model.add(Dense(1))
+        model.compile(loss='mean_squared_error', optimizer='adam')
+
+        history = model.fit(X_train, Y_train, epochs=15, batch_size=32, validation_data=(X_test, Y_test), 
+                    callbacks=[EarlyStopping(monitor='val_loss', patience=5)], verbose=1, shuffle=False)
+        
+        train_predict = model.predict(X_train)
+        test_predict = model.predict(X_test)
+        # invert predictions
+        train_predict = scaler.inverse_transform(train_predict)
+        Y_train = scaler.inverse_transform([Y_train])
+        test_predict = scaler.inverse_transform(test_predict)
+        Y_test = scaler.inverse_transform([Y_test])
+    
+
+
 
 def convertingToKML(file):
     f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
@@ -153,7 +256,7 @@ def scraping_function(url, s_elevation, e_elevation):
         d = df['m/s'][n-1] - (deceleration/2)
         lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][n-1], df['Longitude'][n-1],  df['meters'][n-1], d/1000, df['Course'][n-1], 0)
         df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], (df['m/s'][n-1]-deceleration)*9/4, alt2, df['Rate'][n-1], '', 1, df['m/s'][n-1]-deceleration, d, 0]
-    fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
+    fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29]))
     st.plotly_chart(fig, use_container_width = True)
     
     df.to_csv(r"Datasets/{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
@@ -213,7 +316,7 @@ def main_function(airport1, airport2):
                 files1 = os.listdir(path1)
                 for i in files1:
                     if "kml" in i:
-                        os.system(path1 + "googleearth.exe " + path1 + r'/{}'.format(i))
+                        webbrowser.run(path1 + r'/{}'.format(i))
                 return "CSV's and KML's have been created"
             else:
                 set1.remove(flight)
