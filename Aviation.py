@@ -64,7 +64,7 @@ def model_implementation():
                 df_new['date_time'][j] = str(int(i[9:11]) + 1) + i[11:] + daylist[j][3:]
         dataframelist.append(df_new)
 
-    predicted_df = pd.Dataframe()
+    predicted_df = pd.DataFrame()
     units = ['Latitude','Longitude','Altitude']
     for i in units:    
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
@@ -111,6 +111,7 @@ def model_implementation():
         st.write(f'Train Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0])))
         st.write(f'Test Mean Absolute Error for {i}:', mean_absolute_error(Y_test[0], test_predict[:,0]))
         st.write(f'Test Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_test[0], test_predict[:,0])))
+	predicted_df[i] = test_predict
 
         fig = plt.figure(figsize=(8,4))
         fig.plot(history.history['loss'], label='Train Loss')
