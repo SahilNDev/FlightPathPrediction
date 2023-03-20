@@ -43,6 +43,7 @@ def create_dataset(dataset, look_back, look_ahead):
 def model_implementation():
     path = os.getcwd() + '/Datasets'
     files = os.listdir(path)
+    st.write(files)
     dataframelist = []
     for i in files:
         if "csv" in i:
