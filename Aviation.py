@@ -46,7 +46,7 @@ def model_implementation():
     dataframelist = []
     for i in files:
         if "csv" in i:
-            df_new = pd.read_csv(r'Datasets/{}'.format(i))
+            df_new = pd.read_csv(i+'1.csv')
             #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
             daylist = np.array(df_new['Time (EDT)'])
             count1 = df_new['Time (EDT)'].first_valid_index()
@@ -59,7 +59,7 @@ def model_implementation():
                     df_new['date_time'][j] = i[9:] + daylist[j][3:]
                 else:
                     df_new['date_time'][j] = str(int(i[9:11]) + 1) + i[11:] + daylist[j][3:]
-
+    st.write(dataframelist)
     for df in dataframelist:
         df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
         count1 = df['date_time'].first_valid_index()
