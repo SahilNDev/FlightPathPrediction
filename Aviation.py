@@ -30,7 +30,6 @@ from keras.layers import *
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
-from glob import glob
 
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
@@ -41,29 +40,23 @@ def create_dataset(dataset, look_back, look_ahead):
     return np.array(X), np.array(Y)
 
 def model_implementation():
-    csvs = glob('\Datasets\*.csv')
-    csv_list = [csv[:-5] for csv in csvs]
-    st.write(csv_list)
-    csv_list.sort()
-    datelist = []
-    for i in csv_list:
-        daynum = i[9:11]
-        datelist.append(int(daynum))
-
+    path = os.getcwd() + '/Datasets'
+    files = os.listdir(path)
     dataframelist = []
-    for i in csv_list:
-        df_new = pd.read_csv(i+'1.csv')
-        df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
-        daylist = np.array(df_new['Time (IST)'])
-        strday = daylist[0][:3]
-        df_new['date_time'] = ''
-        for j in range(df_new.shape[0]):
-            day2 = daylist[j][:3]
-            if(strday==day2):
-                df_new['date_time'][j] = i[9:] + daylist[j][3:]
-            else:
-                df_new['date_time'][j] = str(int(i[9:11]) + 1) + i[11:] + daylist[j][3:]
-        dataframelist.append(df_new)
+    for i in files:
+        if "csv" in i:
+            df_new = pd.read_csv(r'Datasets/{}'.format(i))
+            df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
+            daylist = np.array(df_new['Time (IST)'])
+            strday = daylist[0][:3]
+            df_new['date_time'] = ''
+            for j in range(df_new.shape[0]):
+                day2 = daylist[j][:3]
+                if(strday==day2):
+                    df_new['date_time'][j] = i[9:] + daylist[j][3:]
+                else:
+                    df_new['date_time'][j] = str(int(i[9:11]) + 1) + i[11:] + daylist[j][3:]
+            dataframelist.append(df_new)
 
     predicted_df = pd.DataFrame()
     units = ['Latitude','Longitude','Altitude']
