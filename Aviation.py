@@ -30,6 +30,7 @@ from keras.layers import *
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
+import datetime
 
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
@@ -45,26 +46,32 @@ def model_implementation():
     dataframelist = []
     for i in files:
         if "csv" in i:
-            df_new = pd.read_csv(r'Datasets/{}'.format(i))
-            st.write(df_new)
-            df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
-            daylist = np.array(df_new['Time (IST)'])
-            strday = daylist[0][:3]
-            df_new['date_time'] = ''
-            for j in range(df_new.shape[0]):
+            df_new = pd.read_csv(i+'1.csv')
+            #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
+            daylist = np.array(df_new['Time (EDT)'])
+            count1 = df_new['Time (EDT)'].first_valid_index()
+            count2 = df_new['Time (EDT)'].last_valid_index()
+            strday = daylist[count1][:3]
+            df_new['date_time'] = np.nan
+            for j in range(count1, count2+1):
                 day2 = daylist[j][:3]
                 if(strday==day2):
                     df_new['date_time'][j] = i[9:] + daylist[j][3:]
                 else:
                     df_new['date_time'][j] = str(int(i[9:11]) + 1) + i[11:] + daylist[j][3:]
-            dataframelist.append(df_new)
 
     for df in dataframelist:
         df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
-        df['day'] = df['date_time'].apply(lambda x: x.day)
-        df['hour'] = df['date_time'].apply(lambda x: x.hour)
-        df['minute'] = df['date_time'].apply(lambda x: x.minute)
-        df['second'] = df['date_time'].apply(lambda x: x.second)
+        count1 = df['date_time'].first_valid_index()
+        count2 = df['date_time'].last_valid_index()
+        for i in range(count1-1,-1,-1):
+            df['date_time'][i] = df['date_time'][i+1] - datetime.timedelta(seconds=1)
+        for i in range(count2+1, df.shape[0]):
+            df['date_time'][i] = df['date_time'][i-1] + datetime.timedelta(seconds=1)
+            df['day'] = df['date_time'].apply(lambda x: x.day)
+            df['hour'] = df['date_time'].apply(lambda x: x.hour)
+            df['minute'] = df['date_time'].apply(lambda x: x.minute)
+            df['second'] = df['date_time'].apply(lambda x: x.second)
 
     predicted_df = pd.DataFrame()
     units = ['Latitude','Longitude','Altitude']
