@@ -43,6 +43,7 @@ def create_dataset(dataset, look_back, look_ahead):
 def model_implementation():
     csvs = glob('/Datasets/*.csv')
     csv_list = [csv[:-5] for csv in csvs]
+    st.write(csv_list)
     csv_list.sort()
     datelist = []
     for i in csv_list:
