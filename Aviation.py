@@ -47,8 +47,8 @@ def model_implementation():
         if "csv" in i:
             df_new = pd.read_csv(r'Datasets/{}'.format(i))
             st.write(df_new)
-            df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
-            daylist = np.array(df_new['Time (IST)'])
+            df_new = df_new.dropna(subset=['Time (EDT)']).reset_index(drop=True)
+            daylist = np.array(df_new['Time (EDT)'])
             strday = daylist[0][:3]
             df_new['date_time'] = ''
             for j in range(df_new.shape[0]):
