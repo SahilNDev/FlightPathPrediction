@@ -47,8 +47,8 @@ def model_implementation():
         if "csv" in i:
             df_new = pd.read_csv(r'Datasets/{}'.format(i))
             st.write(df_new)
-            df_new = df_new.dropna(subset=['Time (EDT)']).reset_index(drop=True)
-            daylist = np.array(df_new['Time (EDT)'])
+            df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
+            daylist = np.array(df_new['Time (IST)'])
             strday = daylist[0][:3]
             df_new['date_time'] = ''
             for j in range(df_new.shape[0]):
@@ -58,6 +58,13 @@ def model_implementation():
                 else:
                     df_new['date_time'][j] = str(int(i[9:11]) + 1) + i[11:] + daylist[j][3:]
             dataframelist.append(df_new)
+
+    for df in dataframelist:
+        df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
+        df['day'] = df['date_time'].apply(lambda x: x.day)
+        df['hour'] = df['date_time'].apply(lambda x: x.hour)
+        df['minute'] = df['date_time'].apply(lambda x: x.minute)
+        df['second'] = df['date_time'].apply(lambda x: x.second)
 
     predicted_df = pd.DataFrame()
     units = ['Latitude','Longitude','Altitude']
