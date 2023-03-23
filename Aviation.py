@@ -357,8 +357,8 @@ tk = 0
 st.markdown("""
 <style>
 .big-font {
-    font-size:300px !important;
-    font-color:"white"
+    font-size:100px !important;
+    font-color:"white" !important;
 }
 </style>
 """, unsafe_allow_html = True)
