@@ -32,7 +32,6 @@ def create_dataset(dataset, look_back, look_ahead):
         X.append(a)
         Y.append(dataset[i + look_back + look_ahead - 1, 0])
     return np.array(X), np.array(Y)
-
 def model_implementation():
     path = os.getcwd() + '/Datasets'
     files = os.listdir(path)
@@ -65,15 +64,12 @@ def model_implementation():
             df['hour'] = df['date_time'].apply(lambda x: x.hour)
             df['minute'] = df['date_time'].apply(lambda x: x.minute)
             df['second'] = df['date_time'].apply(lambda x: x.second)
-
     units = ['Latitude','Longitude','meters']
     for i in units:    
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
         for df in dataframelist[1:]:
             df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second']]
             df_update = pd.concat([df_update, df_lat], axis=0)
-
-
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
         dataset = np.reshape(dataset, (-1, 1))
@@ -86,18 +82,14 @@ def model_implementation():
         look_ahead = 1
         X_train, Y_train = create_dataset(train, look_back, look_ahead)
         X_test, Y_test = create_dataset(test, look_back, look_ahead)
-
         # reshape input to be [samples, time steps, features]
         X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
         X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
-
-
         model = Sequential()
         model.add(LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2])))
         model.add(Dropout(0.2))
         model.add(Dense(1))
         model.compile(loss='mean_squared_error', optimizer='adam')
-
         history = model.fit(X_train, Y_train, epochs=15, batch_size=32, validation_data=(X_test, Y_test), 
                     callbacks=[EarlyStopping(monitor='val_loss', patience=5)], verbose=1, shuffle=False)
         
@@ -112,7 +104,6 @@ def model_implementation():
         st.write(f'Train Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0])))
         st.write(f'Test Mean Absolute Error for {i}:', mean_absolute_error(Y_test[0], test_predict[:,0]))
         st.write(f'Test Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_test[0], test_predict[:,0])))
-
         fig = plt.figure(figsize=(8,4))
         plt.plot(history.history['loss'], label='Train Loss')
         plt.plot(history.history['val_loss'], label='Test Loss')
@@ -121,7 +112,6 @@ def model_implementation():
         plt.xlabel('epochs')
         plt.legend(loc='upper right')
         st.pyplot(fig)
-
         aa=[x for x in range(Y_test.shape[1])]
         fig1 = plt.figure(figsize=(8,4))
         plt.plot(aa, Y_test[0][:], marker='.', label="actual")
@@ -134,8 +124,6 @@ def model_implementation():
         plt.xlabel('Time step', size=15)
         plt.legend(fontsize=10)
         st.pyplot(fig1)
-
-
 def convertingToKML(file):
     f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
     reader = csv.reader(f1)
@@ -166,7 +154,6 @@ def convertingToKML(file):
 			        	    <altitudeMode>absolute</altitudeMode>
 			    	        </Camera>
 			    	    </gx:FlyTo>\n""")
-
     f2.write("""		  </gx:Playlist>
 	  	    </gx:Tour></kml>""")
     f1.close()
@@ -280,7 +267,7 @@ def scraping_function(url, s_elevation, e_elevation):
         lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][n-1], df['Longitude'][n-1],  df['meters'][n-1], d/1000, df['Course'][n-1], 0)
         df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], (df['m/s'][n-1]-deceleration)*9/4, alt2, df['Rate'][n-1], '', 1, df['m/s'][n-1]-deceleration, d, 0]
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29]))
-    st.plotly_chart(fig, use_container_width = True, theme = "streamlit")
+    st.plotly_chart(fig, use_container_width = True)
     
     df.to_csv(r"Datasets/{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
     return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
@@ -353,24 +340,13 @@ def add_bg_from_url():
          unsafe_allow_html=True
      )
 add_bg_from_url()
-darkmode = """
-<style>
-body {
-  background-color: black;
-  color: white;
-}
-</style>
-"""
-st.markdown(darkmode,unsafe_allow_html=True)
 tk = 0
-st.markdown('<h1 style="color:#FFFFFF;font-size:400%;">Predict Flight Path Between Two Places</h1>', unsafe_allow_html = True)
+st.title("Predict Flight Path Between Two Places")
 col1, col2 = st.columns(2)
 with col1:
-    st.markdown('<p style="color:#FFFFFF;">Origin: </p>', unsafe_allow_html = True)
-    origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0, label_visibility = "collapsed")
+    origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
 with col2:
-    st.markdown('<p style="color:#FFFFFF;">Destination: </p>', unsafe_allow_html = True)
-    destination = st.selectbox(':white[Destination: ]', tuple(df[df['Display Name']!=origin]['Display Name']), label_visibility = "collapsed")
+    destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
     if st.button('Submit'):
         tk = 1
 if tk == 1:
