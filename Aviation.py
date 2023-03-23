@@ -124,16 +124,18 @@ def model_implementation():
         plt.xlabel('Time step', size=15)
         plt.legend(fontsize=10)
         st.pyplot(fig1)
-def convertingToKML(file):
+	
+	
+def convertingToKML(file,s,e):
     f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
     reader = csv.reader(f1)
     f2 = open(r"KML-Files/{}.kml".format(file),'w')
-    f2.write("""<?xml version="1.0" encoding="UTF-8"?>
+    f2.write(f"""<?xml version="1.0" encoding="UTF-8"?>
 	    <kml xmlns="http://www.opengis.net/kml/2.2"
   	    xmlns:gx="http://www.google.com/kml/ext/2.2">
-	    <name>Chennai to Delhi</name>    
+	    <name>{s} to {e}</name>    
 		    <gx:Tour>
-	        <name>Chennai to Delhi</name>
+	        <name>{s} to {e}</name>
 	   		    <gx:Playlist>\n""")
     x = 0
     for row in reader:
@@ -277,6 +279,8 @@ def main_function(airport1, airport2):
     airports = pd.read_csv("in-airports.csv")
     main_url = "https://uk.flightaware.com"
     url_extract = requests.get(main_url + "/live/findflight?origin={}&destination={}".format(airport1, airport2)).text
+    s = airports[airports['gps_code'] == airport1].reset_index(drop = True)['municipality'][0]
+    e = airports[airports['gps_code'] == airport2].reset_index(drop = True)['municipality'][0]
     soup = BeautifulSoup(url_extract, 'lxml')
     table = soup.find_all('tr', class_ = "ffinder-results-row-bordertop ffinder-results-row")
     set1 = set()
@@ -318,7 +322,7 @@ def main_function(airport1, airport2):
                         os.remove(path1 + r'/{}'.format(i))
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight)
-                    convertingToKML(file)
+                    convertingToKML(file, s, e)
                 st.write("CSV's and KML's have been created")
                 model_implementation()
             else:
