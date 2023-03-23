@@ -184,7 +184,7 @@ def get_point_at_distance(lat1, lon1, alt1, d, bearing, tilt, R=6371):
     lon2 = lon1 + (d/(R*cos(lat1)))*sin(a)*cos(tilt)
     
     return (degrees(lat2), degrees(lon2), alt2, )
-def scraping_function(url, s_elevation, e_elevation, flight):
+def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     url_extract = requests.get(url).text
     soup = BeautifulSoup(url_extract, 'lxml')
     table = soup.find('table', class_ = "prettyTable fullWidth")
@@ -269,6 +269,8 @@ def scraping_function(url, s_elevation, e_elevation, flight):
         lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][n-1], df['Longitude'][n-1],  df['meters'][n-1], d/1000, df['Course'][n-1], 0)
         df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], (df['m/s'][n-1]-deceleration)*9/4, alt2, df['Rate'][n-1], '', 1, df['m/s'][n-1]-deceleration, d, 0]
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}-{}-{}".format(flight, url[-27:-25], url[-29:-27], url[-33:-29]))
+    fig.add_annotation(x=df['Longitude'][0], y=df['Latitude'][0], z=df['meters'][0],text=s)
+    fig.add_annotation(x=df['Longitude'][len(df)-1], y = df['Latitude'][len(df)-1], z=df['meters'][len(df)-1],text=e)
     st.plotly_chart(fig, use_container_width = True)
     
     df.to_csv(r"Datasets/{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
@@ -321,7 +323,7 @@ def main_function(airport1, airport2):
                     if "kml" in i:
                         os.remove(path1 + r'/{}'.format(i))
                 for i in range(5):
-                    file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight)
+                    file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     convertingToKML(file, s, e)
                 st.write("CSV's and KML's have been created")
                 model_implementation()
