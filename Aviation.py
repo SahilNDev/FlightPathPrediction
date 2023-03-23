@@ -325,10 +325,12 @@ def main_function(airport1, airport2):
                     convertingToKML(file, s, e)
                 st.write("CSV's and KML's have been created")
                 model_implementation()
+		return
             else:
                 set1.remove(flight)
     except Exception:
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
+	return
     
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
