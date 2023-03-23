@@ -320,7 +320,7 @@ def main_function(airport1, airport2):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
                     convertingToKML(file)
                 st.write("CSV's and KML's have been created")
-		model_implementation()
+                model_implementation()
             else:
                 set1.remove(flight)
     except Exception as e:
