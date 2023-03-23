@@ -357,9 +357,9 @@ tk = 0
 st.markdown('<h1 style="color:#FFFFFF;font-size:400%;">Predict Flight Path Between Two Places</h1>', unsafe_allow_html = True)
 col1, col2 = st.columns(2)
 with col1:
-    origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
+    origin = st.selectbox(':#FFFFFF[Origin: ]', set(df['Display Name']), index = 0)
 with col2:
-    destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
+    destination = st.selectbox(':#FFFFFF[Destination: ]', tuple(df[df['Display Name']!=origin]['Display Name']))
     if st.button('Submit'):
         tk = 1
 if tk == 1:
