@@ -361,8 +361,8 @@ st.title("""
     font-color:"white"
 }
 </style>
-""", unsafe_allow_html=True)
-st.title('<h1 class = "big-font">Predict Flight Path Between Two Places</h1>', unsafe_allow_html = True)
+""")
+st.title('<h1 class = "big-font">Predict Flight Path Between Two Places</h1>')
 col1, col2 = st.columns(2)
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
