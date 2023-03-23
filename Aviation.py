@@ -319,11 +319,12 @@ def main_function(airport1, airport2):
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2)
                     convertingToKML(file)
-                return "CSV's and KML's have been created"
+                st.write("CSV's and KML's have been created")
+		model_implementation()
             else:
                 set1.remove(flight)
     except Exception as e:
-        return e
+        st.write(e)
     
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
@@ -352,5 +353,4 @@ with col2:
 if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
-    st.write(main_function(x, y))
-    model_implementation()
+    main_function(x, y)
