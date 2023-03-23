@@ -353,6 +353,15 @@ def add_bg_from_url():
          unsafe_allow_html=True
      )
 add_bg_from_url()
+darkmode = """
+<style>
+body {
+  background-color: black;
+  color: white;
+}
+</style>
+"""
+st.markdown(darkmode,unsafe_allow_html=True)
 tk = 0
 st.markdown('<h1 style="color:#FFFFFF;font-size:400%;">Predict Flight Path Between Two Places</h1>', unsafe_allow_html = True)
 col1, col2 = st.columns(2)
