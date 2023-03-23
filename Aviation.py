@@ -362,7 +362,7 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html = True)
-st.markdown('<h1 class = "big-font">Predict Flight Path Between Two Places</h1>', unsafe_allow_html = True)
+st.markdown('<p class = "big-font">Predict Flight Path Between Two Places</p>', unsafe_allow_html = True)
 col1, col2 = st.columns(2)
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
