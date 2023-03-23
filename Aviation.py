@@ -354,15 +354,7 @@ def add_bg_from_url():
      )
 add_bg_from_url()
 tk = 0
-st.markdown("""
-<style>
-.big-font {
-    font-size:75px !important;
-    font-color:"white" !important;
-}
-</style>
-""", unsafe_allow_html = True)
-st.markdown('<p class = "big-font">Predict Flight Path Between Two Places</p>', unsafe_allow_html = True)
+st.markdown('<h2 class = "big-font">Predict Flight Path Between Two Places</h2>', unsafe_allow_html = True)
 col1, col2 = st.columns(2)
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
