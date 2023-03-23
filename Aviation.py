@@ -1,12 +1,9 @@
 from bs4 import BeautifulSoup
-import requests, re
+import requests, re, random, os, csv, math, keras, warnings, datetime
 from math import asin, atan2, cos, degrees, radians, sin
 import plotly.io as pio
 import plotly.express as px
-import random
-import os
 import streamlit as st
-import csv
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -14,7 +11,6 @@ pd.set_option('display.float_format', lambda x: '%.4f' % x)
 import seaborn as sns
 sns.set_context("paper", font_scale=1.3)
 sns.set_style('white')
-import warnings
 warnings.filterwarnings('ignore')
 from time import time
 import matplotlib.ticker as tkr
@@ -22,15 +18,12 @@ from scipy import stats
 from statsmodels.tsa.stattools import adfuller
 from sklearn import preprocessing
 from statsmodels.tsa.stattools import pacf
-import math
-import keras
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Dropout
 from keras.layers import *
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
-import datetime
 
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
