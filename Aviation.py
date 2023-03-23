@@ -327,8 +327,8 @@ def main_function(airport1, airport2):
                 model_implementation()
             else:
                 set1.remove(flight)
-    except Exception as e:
-        st.write(e)
+    except Exception:
+        st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
     
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
