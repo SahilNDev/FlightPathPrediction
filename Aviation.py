@@ -348,7 +348,7 @@ def add_bg_from_url():
          """,
          unsafe_allow_html=True
      )
-st.set_page_config(layout='wide')
+st.set_page_config(layout='wide', page_title="Bird's Eye")
 add_bg_from_url()
 tk = 0
 st.title("Predict Flight Path Between Two Places")
