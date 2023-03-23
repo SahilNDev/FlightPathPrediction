@@ -120,7 +120,7 @@ def model_implementation():
         plt.tight_layout()
         sns.despine(top=True)
         plt.subplots_adjust(left=0.07)
-        plt.ylabel('Latitude', size=15)
+        plt.ylabel(i, size=15)
         plt.xlabel('Time step', size=15)
         plt.legend(fontsize=10)
         st.pyplot(fig1)
