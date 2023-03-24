@@ -81,8 +81,7 @@ def model_implementation(files):
         test_size = dataframelist[-1].shape[0]
         train_size = len(dataset) - test_size
         train, test = dataset[:train_size,:], dataset[train_size:,:]
-        st.write(train)
-        st.write(test)
+        st.write(test.shape)
         look_back = 5
         look_ahead = 1
         X_train, Y_train = create_dataset(train, look_back, look_ahead)
@@ -90,6 +89,7 @@ def model_implementation(files):
         # reshape input to be [samples, time steps, features]
         X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
         X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
+        st.write(X_test.shape)
         model = Sequential()
         model.add(LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2])))
         model.add(Dropout(0.2))
@@ -106,6 +106,8 @@ def model_implementation(files):
         test_predict = scaler.inverse_transform(test_predict)
         Y_test = scaler.inverse_transform([Y_test])
         units_dict[i] = test_predict[:,0]
+        st.write(len(test_predict))
+	st.write(len(Y_test))
         st.write(f'Train Mean Absolute Error for {i}:', mean_absolute_error(Y_train[0], train_predict[:,0]))
         st.write(f'Train Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0])))
         st.write(f'Test Mean Absolute Error for {i}:', mean_absolute_error(Y_test[0], test_predict[:,0]))
@@ -131,7 +133,6 @@ def model_implementation(files):
         plt.legend(fontsize=10)
         st.pyplot(fig1)
     st.write(units_dict)
-    st.write(predicted_df)
 	
 	
 def convertingToKML(file,s,e):
