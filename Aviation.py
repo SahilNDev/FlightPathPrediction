@@ -81,6 +81,7 @@ def model_implementation():
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
         dataset = np.reshape(dataset, (-1, 1))
+        st.write(dataset)
         scaler = MinMaxScaler(feature_range=(0, 1))
         dataset = scaler.fit_transform(dataset)
         test_size = dataframelist[-1].shape[0]
