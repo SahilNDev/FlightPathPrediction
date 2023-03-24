@@ -87,8 +87,8 @@ def model_implementation(files):
         look_ahead = 1
         X_train, Y_train = create_dataset(train, look_back, look_ahead)
         X_test, Y_test = create_dataset(test, look_back, look_ahead)
-        st.write(X_test)
-        predicted_df = scaler.inverse_transform([X_test])
+#         st.write(X_test)
+#         predicted_df = scaler.inverse_transform([X_test])
         # reshape input to be [samples, time steps, features]
         X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
         X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
