@@ -338,10 +338,13 @@ def main_function(airport1, airport2):
                 for i in files1:
                     if "kml" in i:
                         os.remove(path1 + r'/{}'.format(i))
+                fileslist = []
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
+                    fileslist.append(file)
                     convertingToKML(file, s, e)
                 st.write("CSV's and KML's have been created")
+                st.write(fileslist.sort())
                 model_implementation()
                 return
             else:
