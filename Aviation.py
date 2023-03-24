@@ -392,6 +392,7 @@ if tk == 1:
                     st.write(j)
                 st.pyplot(i[-2])
                 st.pyplot(i[-1])
+
         if selected == 'Analysis':
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}.csv".format(i))
