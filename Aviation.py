@@ -70,6 +70,7 @@ def model_implementation():
             df['minute'] = df['date_time'].apply(lambda x: x.minute)
             df['second'] = df['date_time'].apply(lambda x: x.second)
     predicted_df = dataframelist[-1]
+    st.write(predicted_df.shape[0])
     st.write(predicted_df)
     units = ['Latitude','Longitude','meters']
     for i in units:    
@@ -107,6 +108,7 @@ def model_implementation():
         Y_train = scaler.inverse_transform([Y_train])
         test_predict = scaler.inverse_transform(test_predict)
         Y_test = scaler.inverse_transform([Y_test])
+        st.write(len(test_predict))
         predicted_df[i] = test_predict
         st.write(f'Train Mean Absolute Error for {i}:', mean_absolute_error(Y_train[0], train_predict[:,0]))
         st.write(f'Train Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0])))
