@@ -69,7 +69,9 @@ def model_implementation(files):
             df['second'] = df['date_time'].apply(lambda x: x.second)
     units_dict = {}
     units = ['Latitude','Longitude','meters']
-    for i in units:    
+    imp_array = []
+    for i in units:
+        arr = []
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
         for df in dataframelist[1:]:
             df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second']]
@@ -82,7 +84,6 @@ def model_implementation(files):
         test_size = dataframelist[-1].shape[0]
         train_size = len(dataset) - test_size
         train, test = dataset[:train_size,:], dataset[train_size:,:]
-        st.write(test.shape)
         look_back = 5
         look_ahead = 1
         X_train, Y_train = create_dataset(train, look_back, look_ahead)
@@ -90,7 +91,6 @@ def model_implementation(files):
         # reshape input to be [samples, time steps, features]
         X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
         X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
-        st.write(X_test.shape)
         model = Sequential()
         model.add(LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2])))
         model.add(Dropout(0.2))
@@ -107,12 +107,10 @@ def model_implementation(files):
         test_predict = scaler.inverse_transform(test_predict)
         Y_test = scaler.inverse_transform([Y_test])
         units_dict[i] = test_predict[:,0]
-        st.write(len(test_predict))
-        st.write(Y_test.shape)
-        st.write(f'Train Mean Absolute Error for {i}:', mean_absolute_error(Y_train[0], train_predict[:,0]))
-        st.write(f'Train Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0])))
-        st.write(f'Test Mean Absolute Error for {i}:', mean_absolute_error(Y_test[0], test_predict[:,0]))
-        st.write(f'Test Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_test[0], test_predict[:,0])))
+        arr.append(f'Train Mean Absolute Error for {i}:', mean_absolute_error(Y_train[0], train_predict[:,0]))
+        arr.append(f'Train Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0])))
+        arr.append(f'Test Mean Absolute Error for {i}:', mean_absolute_error(Y_test[0], test_predict[:,0]))
+        arr.append(f'Test Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_test[0], test_predict[:,0])))
         fig = plt.figure(figsize=(8,4))
         plt.plot(history.history['loss'], label='Train Loss')
         plt.plot(history.history['val_loss'], label='Test Loss')
@@ -120,7 +118,7 @@ def model_implementation(files):
         plt.ylabel('loss')
         plt.xlabel('epochs')
         plt.legend(loc='upper right')
-        st.pyplot(fig)
+        arr.append(fig)
         aa=[x for x in range(Y_test.shape[1])]
         fig1 = plt.figure(figsize=(8,4))
         plt.plot(aa, Y_test[0][:], marker='.', label="actual")
@@ -132,7 +130,7 @@ def model_implementation(files):
         plt.ylabel(i, size=15)
         plt.xlabel('Time step', size=15)
         plt.legend(fontsize=10)
-        st.pyplot(fig1)
+        arr.append(fig1)
 	
 	
 def convertingToKML(file,s,e):
@@ -346,7 +344,8 @@ def main_function(airport1, airport2):
             else:
                 set1.remove(flight)
     except Exception as ex:
-        return f"No flights are there between {s} and {e}, change the locations and try again."
+        st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
+        return
     
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
@@ -379,11 +378,17 @@ if tk == 1:
     a_list = main_function(x, y)
     st.write(type(a_list))
     if type(a_list) is list:
-        st.write("Perfect")
-    selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="horizontal", icons = ['gear-wide-connected', 'bar-chart-line'],
-    styles={
+        x = model_implementation(a_list)
+        selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="horizontal", icons = ['gear-wide-connected', 'bar-chart-line'],
+        styles={
         "container": {"padding": "0!important", "background-color": "#9d0208", "max-width": "100%"},
         "icon": {"color": "orange", "font-size": "18px"}, 
         "nav-link": {"color":"white", "font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#780000", "border" : "2px #fb6f92"},
         "nav-link-selected": {"background-color": "#370617"},
-    })
+        })
+        if selected == 'Prediction':
+            for i in x:
+                for j in i[:-2]:
+                    st.write(j)
+                st.pyplot(i[-2])
+                st.pyplot(i[-1])
