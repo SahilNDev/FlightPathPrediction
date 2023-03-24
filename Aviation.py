@@ -167,7 +167,7 @@ def convertingToKML(file,s,e):
     f2.close()
     f = open(r"KML-Files/{}.kml".format(file),'r')
     fie = f.read()
-    st.markdown(get_download_link(fie, "{}.kml".format(file), unsafe_allow_html = True)
+    st.markdown(get_download_link(fie, "{}.kml".format(file)), unsafe_allow_html = True)
     f.close()
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
