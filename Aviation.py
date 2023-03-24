@@ -50,9 +50,9 @@ def model_implementation(files):
         for j in range(count1, count2+1):
             day2 = daylist[j][:3]
             if(strday==day2):
-                df_new['date_time'][j] = i[:-4] + daylist[j][3:]
+                df_new['date_time'][j] = i + daylist[j][3:]
             else:
-                df_new['date_time'][j] = str(int(i[:2]) + 1) + i[2:-4] + daylist[j][3:]
+                df_new['date_time'][j] = str(int(i[:2]) + 1) + i[2:] + daylist[j][3:]
         dataframelist.append(df_new)
     for df in dataframelist:
         df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
