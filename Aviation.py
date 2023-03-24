@@ -69,6 +69,7 @@ def model_implementation():
             df['hour'] = df['date_time'].apply(lambda x: x.hour)
             df['minute'] = df['date_time'].apply(lambda x: x.minute)
             df['second'] = df['date_time'].apply(lambda x: x.second)
+    st.write(dataframelist[0].columns)
     units = ['Latitude','Longitude','meters']
     for i in units:    
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
