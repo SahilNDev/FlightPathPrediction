@@ -344,7 +344,7 @@ def main_function(airport1, airport2):
                     fileslist.append(file)
                     convertingToKML(file, s, e)
                 st.write("CSV's and KML's have been created")
-                st.write(fileslist.sort())
+                st.write(fileslist)
                 model_implementation()
                 return
             else:
