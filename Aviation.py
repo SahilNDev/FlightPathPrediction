@@ -379,4 +379,10 @@ if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     main_function(x, y)
-    selected = option_menu(None, ['Prediction', 'Analysis'])
+    selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="horizontal",
+    styles={
+        "container": {"padding": "0!important", "background-color": "#9d0208", "max-width": "100%"},
+        "icon": {"color": "orange", "font-size": "18px"}, 
+        "nav-link": {"color":"white", "font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#780000", "border" : "2px #fb6f92"},
+        "nav-link-selected": {"background-color": "#370617"},
+    })
