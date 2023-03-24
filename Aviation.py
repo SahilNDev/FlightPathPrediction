@@ -91,6 +91,7 @@ def model_implementation():
         look_ahead = 1
         X_train, Y_train = create_dataset(train, look_back, look_ahead)
         X_test, Y_test = create_dataset(test, look_back, look_ahead)
+        st.write(X_test)
         # reshape input to be [samples, time steps, features]
         X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
         X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
@@ -110,7 +111,6 @@ def model_implementation():
         test_predict = scaler.inverse_transform(test_predict)
         Y_test = scaler.inverse_transform([Y_test])
         st.write(len(test_predict))
-        st.write(train_predict)
         st.write(f'Train Mean Absolute Error for {i}:', mean_absolute_error(Y_train[0], train_predict[:,0]))
         st.write(f'Train Root Mean Squared Error for {i}:',np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0])))
         st.write(f'Test Mean Absolute Error for {i}:', mean_absolute_error(Y_test[0], test_predict[:,0]))
