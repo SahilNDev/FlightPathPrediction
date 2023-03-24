@@ -131,7 +131,8 @@ def model_implementation(files):
         plt.xlabel('Time step', size=15)
         plt.legend(fontsize=10)
         arr.append(fig1)
-	
+        imp_array.append(arr)
+    return imp_array
 	
 def convertingToKML(file,s,e):
     f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
