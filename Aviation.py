@@ -342,13 +342,11 @@ def main_function(airport1, airport2):
                     convertingToKML(file, s, e)
                 st.write("CSV's and KML's have been created")
                 model_implementation(fileslist)
-                return
+                return fileslist
             else:
                 set1.remove(flight)
     except Exception as ex:
-        st.write(ex)
-        st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
-        return
+        return f"No flights are there between {s} and {e}, change the locations and try again."
     
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
@@ -378,7 +376,8 @@ with col2:
 if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
-    main_function(x, y)
+    a_list = main_function(x, y)
+    st.write(a_list)
     selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="horizontal", icons = ['gear-wide-connected', 'bar-chart-line'],
     styles={
         "container": {"padding": "0!important", "background-color": "#9d0208", "max-width": "100%"},
