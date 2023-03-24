@@ -26,7 +26,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 
 def get_download_link(df,x):
-    csv = df.to_csv(x.format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
+    csv = df.to_csv(x, index = False)
     b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
     href = f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
 
