@@ -66,7 +66,6 @@ def model_implementation(files):
             df['hour'] = df['date_time'].apply(lambda x: x.hour)
             df['minute'] = df['date_time'].apply(lambda x: x.minute)
             df['second'] = df['date_time'].apply(lambda x: x.second)
-    predicted_df = ''
     units_dict = {}
     units = ['Latitude','Longitude','meters']
     for i in units:    
@@ -77,12 +76,13 @@ def model_implementation(files):
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
         dataset = np.reshape(dataset, (-1, 1))
-        st.write(dataset)
         scaler = MinMaxScaler(feature_range=(0, 1))
         dataset = scaler.fit_transform(dataset)
         test_size = dataframelist[-1].shape[0]
         train_size = len(dataset) - test_size
         train, test = dataset[:train_size,:], dataset[train_size:,:]
+        st.write(train)
+        st.write(test)
         look_back = 5
         look_ahead = 1
         X_train, Y_train = create_dataset(train, look_back, look_ahead)
@@ -90,7 +90,6 @@ def model_implementation(files):
         # reshape input to be [samples, time steps, features]
         X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
         X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
-        st.write(scaler.inverse_transform(X_test[:,0]))
         model = Sequential()
         model.add(LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2])))
         model.add(Dropout(0.2))
