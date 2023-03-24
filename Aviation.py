@@ -357,7 +357,7 @@ def add_bg_from_url():
          f"""
          <style>
          .stApp {{
-             background-image: url("https://i.redd.it/pj4a3txge6941.jpg");
+             background-image: url("https://thumbs.dreamstime.com/b/airplane-flying-night-milky-way-galaxy-air-plane-79260826.jpg");
              background-attachment: fixed;
              background-size: cover
          }}
