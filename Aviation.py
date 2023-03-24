@@ -26,9 +26,9 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 import base64
 
-def get_download_link(file, x):
+def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
-    return f'<a href="data:file/csv;base64,{b64}" download = "{x}">Download csv file</a>'
+    return f'<a href="data:file/csv;base64,{b64}" download = "{x}.{type}">Download {type} file</a>'
 
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
@@ -167,7 +167,7 @@ def convertingToKML(file,s,e):
     f2.close()
     f = open(r"KML-Files/{}.kml".format(file),'r')
     fie = f.read()
-    st.markdown(get_download_link(fie, "{}.kml".format(file)), unsafe_allow_html = True)
+    st.markdown(get_download_link(fie, file, "kml"), unsafe_allow_html = True)
     f.close()
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
@@ -279,9 +279,9 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
         df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], (df['m/s'][n-1]-deceleration)*9/4, alt2, df['Rate'][n-1], '', 1, df['m/s'][n-1]-deceleration, d, 0]
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}-{}-{}".format(flight, url[-27:-25], url[-29:-27], url[-33:-29]))
     st.plotly_chart(fig, use_container_width = True)
-    x = "{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29])
+    x = "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     csv = df.to_csv(index = False)
-    st.markdown(get_download_link(csv, x), unsafe_allow_html = True)
+    st.markdown(get_download_link(csv, x, "csv"), unsafe_allow_html = True)
     df.to_csv(r"Datasets/{}".format(x), index = False)
     return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     
