@@ -29,7 +29,7 @@ import base64
 def get_download_link(df):
     csv = df.to_csv(index = False)
     b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-    href = f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
+    return f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
 
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
