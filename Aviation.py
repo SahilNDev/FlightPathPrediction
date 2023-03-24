@@ -40,7 +40,7 @@ def create_dataset(dataset, look_back, look_ahead):
 def model_implementation(files):
     dataframelist = []
     for i in files:
-        df_new = pd.read_csv(r'Datasets/{}'.format(i))
+        df_new = pd.read_csv(r'Datasets/{}.csv'.format(i))
         #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
         daylist = np.array(df_new['Time (EDT)'])
         count1 = df_new['Time (EDT)'].first_valid_index()
