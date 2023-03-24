@@ -271,7 +271,10 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}-{}-{}".format(flight, url[-27:-25], url[-29:-27], url[-33:-29]))
     st.plotly_chart(fig, use_container_width = True)
     
-    df.to_csv(r"Datasets/{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
+    csv = df.to_csv(r"Datasets/{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
+    st.write(href)
     return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     
     
