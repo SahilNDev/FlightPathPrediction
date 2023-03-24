@@ -27,7 +27,7 @@ from keras.callbacks import EarlyStopping
 import base64
 
 def get_download_link(file, x):
-    b64 = base64.b64encode(file)  # some strings <-> bytes conversions necessary here
+    b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/csv;base64,{b64}" download = "{x}">Download csv file</a>'
 
 def create_dataset(dataset, look_back, look_ahead):
