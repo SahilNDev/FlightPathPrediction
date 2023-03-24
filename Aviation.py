@@ -276,7 +276,7 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}-{}-{}".format(flight, url[-27:-25], url[-29:-27], url[-33:-29]))
     st.plotly_chart(fig, use_container_width = True)
     
-    st.markdown(get_downlaod_link(df), unsafe_allow_html = True)
+    st.markdown(get_download_link(df), unsafe_allow_html = True)
     return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     
     
