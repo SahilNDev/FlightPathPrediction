@@ -26,9 +26,8 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 import base64
 
-def get_download_link(df, x):
-    csv = df.to_csv(index = False)
-    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+def get_download_link(file, x):
+    b64 = base64.b64encode(file)  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/csv;base64,{b64}" download = "{x}">Download csv file</a>'
 
 def create_dataset(dataset, look_back, look_ahead):
@@ -166,6 +165,9 @@ def convertingToKML(file,s,e):
 	  	    </gx:Tour></kml>""")
     f1.close()
     f2.close()
+    f = open(r"KML-Files/{}.kml".format(file),'r')
+    fie = f.read()
+    st.markdown(get_download_link(fie, "{}.kml".format(file), unsafe_allow_html = True)
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
 def mph_to_mps(speed):
@@ -277,7 +279,8 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}-{}-{}".format(flight, url[-27:-25], url[-29:-27], url[-33:-29]))
     st.plotly_chart(fig, use_container_width = True)
     x = "{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29])
-    st.markdown(get_download_link(df, x), unsafe_allow_html = True)
+    csv = df.to_csv(index = False)
+    st.markdown(get_download_link(csv, x), unsafe_allow_html = True)
     df.to_csv(r"Datasets/{}".format(x), index = False)
     return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     
@@ -329,7 +332,7 @@ def main_function(airport1, airport2):
                         os.remove(path1 + r'/{}'.format(i))
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
-                    # convertingToKML(file, s, e)
+                    convertingToKML(file, s, e)
                 st.write("CSV's and KML's have been created")
                 model_implementation()
                 return
