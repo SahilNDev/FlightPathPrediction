@@ -136,6 +136,7 @@ def model_implementation(files):
 	
 def convertingToKML(file,s,e):
     f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
+    st.markdown(get_download_link(f1.read(), file, "csv"), unsafe_allow_html = True)
     reader = csv.reader(f1)
     f2 = open(r"KML-Files/{}.kml".format(file),'w')
     f2.write(f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -283,10 +284,8 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}-{}-{}".format(flight, url[-27:-25], url[-29:-27], url[-33:-29]))
     #st.plotly_chart(fig, use_container_width = True)
     x = "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
-    csv = df.to_csv(index = False)
-    st.markdown(get_download_link(csv, x, "csv"), unsafe_allow_html = True)
     df.to_csv(r"Datasets/{}.csv".format(x), index = False)
-    return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
+    return x
     
     
 def main_function(airport1, airport2):
@@ -341,7 +340,7 @@ def main_function(airport1, airport2):
                     #convertingToKML(file, s, e)
                 st.write("CSV's and KML's have been created")
                 #model_implementation(fileslist)
-                return fileslist
+                return fileslist, flight,s,e
             else:
                 set1.remove(flight)
     except Exception as ex:
@@ -376,7 +375,7 @@ with col2:
 if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
-    a_list = main_function(x, y)
+    a_list, flight,s,e = main_function(x, y)
     st.write(type(a_list))
     if type(a_list) is list:
         x = model_implementation(a_list)
@@ -393,3 +392,9 @@ if tk == 1:
                     st.write(j)
                 st.pyplot(i[-2])
                 st.pyplot(i[-1])
+        if selected == 'Analysis':
+            for i in a_list:
+                df = pd.read_csv(r"Datasets/{}.csv".format(i))
+                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
+                st.plotly_chart(fig, use_container_width = True)
+                convertingToKML(i, s, e)
