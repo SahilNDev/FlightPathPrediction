@@ -25,6 +25,11 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 
+def get_download_link(df):
+    csv = df.to_csv(r"Datasets/{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
+
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
     for i in range(len(dataset)-look_back-look_ahead):
@@ -271,10 +276,7 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}-{}-{}".format(flight, url[-27:-25], url[-29:-27], url[-33:-29]))
     st.plotly_chart(fig, use_container_width = True)
     
-    csv = df.to_csv(r"Datasets/{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29]), index = False)
-    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-    href = f'<a href="data:file/csv;base64,{b64}">Download csv file</a>'
-    st.write(href)
+    st.markdown(get_downlaod_link(df), unsafe_allow_html = True)
     return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     
     
