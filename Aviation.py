@@ -28,7 +28,7 @@ import base64
 
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
-    return f'<a href="data:file/csv;base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
+    return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
 
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
