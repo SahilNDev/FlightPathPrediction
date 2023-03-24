@@ -132,7 +132,6 @@ def model_implementation(files):
         plt.xlabel('Time step', size=15)
         plt.legend(fontsize=10)
         st.pyplot(fig1)
-    st.write(units_dict)
 	
 	
 def convertingToKML(file,s,e):
