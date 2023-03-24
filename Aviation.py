@@ -282,7 +282,7 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     x = "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     csv = df.to_csv(index = False)
     st.markdown(get_download_link(csv, x, "csv"), unsafe_allow_html = True)
-    df.to_csv(r"Datasets/{}".format(x), index = False)
+    df.to_csv(r"Datasets/{}.csv".format(x), index = False)
     return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     
     
