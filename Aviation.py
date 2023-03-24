@@ -357,7 +357,7 @@ def add_bg_from_url():
          f"""
          <style>
          .stApp {{
-             background-image: url("https://thumbs.dreamstime.com/b/airplane-flying-night-milky-way-galaxy-air-plane-79260826.jpg");
+             background-image: url("https://www.kukksi.de/wp-content/uploads/2021/02/iStock-807395598-1536x864.jpg");
              background-attachment: fixed;
              background-size: cover
          }}
