@@ -377,6 +377,7 @@ if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     a_list = main_function(x, y)
+    st.write(type(a_list))
     if type(a_list) == 'list':
         st.write("Perfect")
     selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="horizontal", icons = ['gear-wide-connected', 'bar-chart-line'],
