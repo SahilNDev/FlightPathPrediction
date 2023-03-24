@@ -37,26 +37,23 @@ def create_dataset(dataset, look_back, look_ahead):
         X.append(a)
         Y.append(dataset[i + look_back + look_ahead - 1, 0])
     return np.array(X), np.array(Y)
-def model_implementation():
-    path = os.getcwd() + '/Datasets'
-    files = os.listdir(path)
+def model_implementation(files):
     dataframelist = []
     for i in files:
-        if "csv" in i:
-            df_new = pd.read_csv(r'Datasets/{}'.format(i))
-            #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
-            daylist = np.array(df_new['Time (EDT)'])
-            count1 = df_new['Time (EDT)'].first_valid_index()
-            count2 = df_new['Time (EDT)'].last_valid_index()
-            strday = daylist[count1][:3]
-            df_new['date_time'] = np.nan
-            for j in range(count1, count2+1):
-                day2 = daylist[j][:3]
-                if(strday==day2):
-                    df_new['date_time'][j] = i[:-4] + daylist[j][3:]
-                else:
-                    df_new['date_time'][j] = str(int(i[:2]) + 1) + i[2:-4] + daylist[j][3:]
-            dataframelist.append(df_new)
+        df_new = pd.read_csv(r'Datasets/{}'.format(i))
+        #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
+        daylist = np.array(df_new['Time (EDT)'])
+        count1 = df_new['Time (EDT)'].first_valid_index()
+        count2 = df_new['Time (EDT)'].last_valid_index()
+        strday = daylist[count1][:3]
+        df_new['date_time'] = np.nan
+        for j in range(count1, count2+1):
+            day2 = daylist[j][:3]
+            if(strday==day2):
+                df_new['date_time'][j] = i[:-4] + daylist[j][3:]
+            else:
+                df_new['date_time'][j] = str(int(i[:2]) + 1) + i[2:-4] + daylist[j][3:]
+        dataframelist.append(df_new)
     for df in dataframelist:
         df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
         count1 = df['date_time'].first_valid_index()
@@ -346,7 +343,7 @@ def main_function(airport1, airport2):
                 st.write("CSV's and KML's have been created")
                 fileslist.sort()
                 st.write(fileslist)
-                model_implementation()
+                model_implementation(fileslist)
                 return
             else:
                 set1.remove(flight)
