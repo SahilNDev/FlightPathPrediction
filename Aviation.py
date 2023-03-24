@@ -278,6 +278,7 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     st.plotly_chart(fig, use_container_width = True)
     x = "{}-{}-{}.csv".format(url[-27:-25], url[-29:-27], url[-33:-29])
     st.markdown(get_download_link(df, x), unsafe_allow_html = True)
+    df.to_csv(r"Datasets/{}".format(x), index = False)
     return "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     
     
