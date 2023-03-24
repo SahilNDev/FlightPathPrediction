@@ -24,6 +24,7 @@ from keras.layers import *
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
+import base64
 
 def get_download_link(df,x):
     csv = df.to_csv(x, index = False)
