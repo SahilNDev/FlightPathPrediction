@@ -132,7 +132,7 @@ def model_implementation(files, flight):
         plt.legend(fontsize=10)
         arr.append(fig1)
         imp_array.append(arr)
-    predicted_df.to_csv(r"Datasets/{}-{}.csv".format(flight, 'Predicted'))
+    predicted_df.to_csv(r"Datasets/{}-{}.csv".format(flight, 'Predicted'), index = False)
     return imp_array
 	
 def convertingToKML(file,s,e, flight):
