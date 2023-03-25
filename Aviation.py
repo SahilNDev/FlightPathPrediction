@@ -367,12 +367,12 @@ if tk == 1:
         st.write("Flight in consideration is {}".format(flight))
         x = model_implementation(a_list, flight)
         st.markdown('<h2>Prediction:</h2>', unsafe_allow_html = True)
+        convertingToKML('Predicted', s, e, flight)
         for i in x:
             for j in i[:-2]:
                 st.write(j)
             st.pyplot(i[-2])
             st.pyplot(i[-1])
-        convertingToKML('Predicted', s, e, flight)
         st.markdown('<h2>Analysis:</h2>', unsafe_allow_html = True)
         for i in a_list:
             df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
