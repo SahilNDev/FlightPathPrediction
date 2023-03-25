@@ -338,7 +338,7 @@ def main_function(airport1, airport2):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
                     #convertingToKML(file, s, e)
-                st.write("CSV's and KML's have been created")
+                st.write("CSVs and KMLs have been created")
                 #model_implementation(fileslist)
                 return fileslist, flight,s,e
             else:
