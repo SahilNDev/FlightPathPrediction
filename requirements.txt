@@ -69,6 +69,7 @@ semver==2.13.0
 six==1.16.0
 smmap==5.0.0
 soupsieve==2.4
+src==0.0.7
 statsmodels==0.13.5
 streamlit-option-menu
 tenacity==8.2.2
