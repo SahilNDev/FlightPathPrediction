@@ -390,8 +390,6 @@ if tk == 1 or st.session_state.load_state:
         "nav-link-selected": {"background-color": "#370617"},
         })
         if selected == 'Prediction':
-            session_state.col1 = True
-            session_state.col2 = False
             for i in x:
                 for j in i[:-2]:
                     st.write(j)
@@ -399,8 +397,6 @@ if tk == 1 or st.session_state.load_state:
                 st.pyplot(i[-1])
 
         if selected == 'Analysis':
-            session_state.col1 = False
-            session_state.col2 = True
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}.csv".format(i))
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
