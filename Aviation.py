@@ -364,7 +364,7 @@ def add_bg_from_url():
 st.set_page_config(layout='wide', page_title="Bird's Eye")
 add_bg_from_url()
 tk = 0
-st.title("Predict Flight Path Between Two Places")
+st.title(":purple[Predict Flight Path Between Two Places] :plane:")
 col1, col2 = st.columns(2)
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
