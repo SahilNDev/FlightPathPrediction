@@ -66,11 +66,12 @@ def model_implementation(files, flight):
             df['hour'] = df['date_time'].apply(lambda x: x.hour)
             df['minute'] = df['date_time'].apply(lambda x: x.minute)
             df['second'] = df['date_time'].apply(lambda x: x.second)
-    units_dict = {}
     units = ['Latitude','Longitude','meters']
     imp_array = []
+    predicted_df = dataframelist[-1]
     for i in units:
         arr = []
+        pr = dataframelist[-1][i][:6]
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
         for df in dataframelist[1:]:
             df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second']]
@@ -105,7 +106,7 @@ def model_implementation(files, flight):
         Y_train = scaler.inverse_transform([Y_train])
         test_predict = scaler.inverse_transform(test_predict)
         Y_test = scaler.inverse_transform([Y_test])
-        units_dict[i] = test_predict[:,0]
+        predicted_df[i] = np.append(pr, test_predict[:,0])
         arr.append(f'Train Mean Absolute Error for {i}: {mean_absolute_error(Y_train[0], train_predict[:,0])}')
         arr.append(f'Train Root Mean Squared Error for {i}: {np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0]))}')
         arr.append(f'Test Mean Absolute Error for {i}: {mean_absolute_error(Y_test[0], test_predict[:,0])}')
@@ -131,6 +132,7 @@ def model_implementation(files, flight):
         plt.legend(fontsize=10)
         arr.append(fig1)
         imp_array.append(arr)
+    predicted_df.to_csv(r"Datasets/{}-{}.csv".format(flight, 'Predicted'))
     return imp_array
 	
 def convertingToKML(file,s,e, flight):
@@ -323,9 +325,6 @@ def main_function(airport1, airport2):
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
-                    #convertingToKML(file, s, e)
-                st.write("CSVs and KMLs have been created")
-                #model_implementation(fileslist)
                 return fileslist, flight,s,e
             else:
                 set1.remove(flight)
@@ -373,6 +372,7 @@ if tk == 1:
                 st.write(j)
             st.pyplot(i[-2])
             st.pyplot(i[-1])
+        convertingToKML('Predicted', s, e, flight)
         st.markdown('<h2>Analysis:</h2>', unsafe_allow_html = True)
         for i in a_list:
             df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
