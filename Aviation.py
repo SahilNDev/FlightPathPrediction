@@ -387,13 +387,19 @@ if tk == 1 or st.session_state.load_state:
         "nav-link": {"color":"white", "font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#780000", "border" : "2px #fb6f92"},
         "nav-link-selected": {"background-color": "#370617"},
         })
+        if "p_state" not in st.session_state:
+            st.session_state.p_state = False
+        if "a_state" not in st.session_state:
+            st.session_state.a_state = False
         if selected == 'Prediction':
+            st.session_state.p_state = True
             for i in x:
                 for j in i[:-2]:
                     st.write(j)
                 st.pyplot(i[-2])
                 st.pyplot(i[-1])
         if selected == 'Analysis':
+            st.session_state.a_state = True
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}.csv".format(i))
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
