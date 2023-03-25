@@ -27,7 +27,6 @@ from keras.callbacks import EarlyStopping
 import base64
 from streamlit_option_menu import option_menu
 
-@st.cache(suppress_st_warning=True)
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
@@ -370,12 +369,9 @@ with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
 with col2:
     destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
-    if "submit_state" not in st.session_state:
-        st.session_state.submit_state = False
     if st.button('Submit'):
         tk = 1
-if tk == 1 or st.session_state.submit_state:
-    st.session_state.submit_state = True
+if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     a_list, flight,s,e = main_function(x, y)
