@@ -26,6 +26,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 import base64
 from streamlit_option_menu import option_menu
+from src.pages.sessionState import SessionState
 
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
@@ -386,7 +387,10 @@ if tk == 1:
         "nav-link": {"color":"white", "font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#780000", "border" : "2px #fb6f92"},
         "nav-link-selected": {"background-color": "#370617"},
         })
+        session_state = SessionState.get(col1=False, col2=False)
         if selected == 'Prediction':
+            session_state.col1 = True
+            session_state.col2 = False
             for i in x:
                 for j in i[:-2]:
                     st.write(j)
@@ -394,6 +398,8 @@ if tk == 1:
                 st.pyplot(i[-1])
 
         if selected == 'Analysis':
+            session_state.col1 = False
+            session_state.col2 = True
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}.csv".format(i))
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
