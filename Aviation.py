@@ -370,7 +370,7 @@ if tk == 1:
                 st.write(j)
             st.pyplot(i[-2])
             st.pyplot(i[-1])
-        st.markdown('Analysis:'	)
+        st.markdown('<h3>Analysis:</h3>', unsafe_allow_html = True)
         for i in a_list:
             df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
             fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
