@@ -375,11 +375,10 @@ with col2:
     if st.button('Submit', type = 'primary'):
         tk = 1
 if tk == 1 or st.session_state.load_state:
-    st.session_state.load_state = True
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     a_list, flight,s,e = main_function(x, y)
-    st.write(type(a_list))
+    st.session_state.load_state = True
     if type(a_list) is list:
         x = model_implementation(a_list)
         selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="horizontal", icons = ['gear-wide-connected', 'bar-chart-line'],
