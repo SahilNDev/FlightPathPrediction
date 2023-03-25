@@ -361,8 +361,11 @@ with col2:
 if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
+    st.write("Scraping is going on....")
     a_list, flight,s,e = main_function(x, y)
     if type(a_list) is list:
+        st.write("Scraping has been done successfully")
+        st.write("Flight in consideration is {}".format(flight))
         x = model_implementation(a_list, flight)
         st.markdown('<h2>Prediction:</h2>', unsafe_allow_html = True)
         for i in x:
