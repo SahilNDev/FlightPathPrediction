@@ -137,7 +137,6 @@ def model_implementation(files, flight):
 	
 def convertingToKML(file,s,e, flight):
     f1 = open(r"Datasets/{}-{}.csv".format(flight, file), 'r', encoding = 'utf-8')
-    st.markdown(get_download_link(f1.read(), file, "csv"), unsafe_allow_html = True)
     reader = csv.reader(f1)
     f2 = open(r"KML-Files/{}-{}.kml".format(flight, file),'w')
     f2.write(f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -170,6 +169,9 @@ def convertingToKML(file,s,e, flight):
 	  	    </gx:Tour></kml>""")
     f1.close()
     f2.close()
+    f1 = open(r"Datasets/{}-{}.csv".format(flight, file), 'r', encoding = 'utf-8')
+    st.markdown(get_download_link(f1.read(), file, "csv"), unsafe_allow_html = True)
+    f1.close()
     f = open(r"KML-Files/{}-{}.kml".format(flight,file),'r')
     st.markdown(get_download_link(f.read(), file, "kml"), unsafe_allow_html = True)
     f.close()
