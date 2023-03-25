@@ -368,14 +368,14 @@ if tk == 1:
         st.write("Scraping has been done successfully")
         st.write("Flight in consideration is {}".format(flight))
         x = model_implementation(a_list, flight)
-        st.markdown('<h2>Prediction:</h2>', unsafe_allow_html = True)
+        st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
         convertingToKML('Predicted', s, e, flight)
         for i in x:
             for j in i[:-2]:
                 st.write(j)
             st.pyplot(i[-2])
             st.pyplot(i[-1])
-        st.markdown('<h2>Analysis:</h2>', unsafe_allow_html = True)
+        st.markdown('<h1>Analysis:</h1>', unsafe_allow_html = True)
         for i in a_list:
             df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
             fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
