@@ -26,6 +26,8 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 import base64
 from streamlit_option_menu import option_menu
+
+@st.experimental_memo(suppress_st_warning=True)
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
@@ -372,21 +374,14 @@ with col2:
     destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
     if st.button('Submit', type = 'primary'):
         tk = 1
-if tk == 1 or st.session_state.load_state:
-    st.session_state.load_state = True
+if tk == 1 or st.session_state.selected_state:
+    st.session_state.selected_state = True
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     a_list, flight,s,e = main_function(x, y)
-    st.write(type(a_list))
     if type(a_list) is list:
         x = model_implementation(a_list)
-        selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="horizontal", icons = ['gear-wide-connected', 'bar-chart-line'],
-        styles={
-        "container": {"padding": "0!important", "background-color": "#9d0208", "max-width": "100%"},
-        "icon": {"color": "orange", "font-size": "18px"}, 
-        "nav-link": {"color":"white", "font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#780000", "border" : "2px #fb6f92"},
-        "nav-link-selected": {"background-color": "#370617"},
-        })
+        selected = st.radio('Plot Type :', ['Prediction','Analysis'])
         if selected == 'Prediction':
             for i in x:
                 for j in i[:-2]:
