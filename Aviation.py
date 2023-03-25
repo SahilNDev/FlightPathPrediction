@@ -370,7 +370,7 @@ with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
 with col2:
     destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
-    if st.button('Submit', type = 'Primary'):
+    if st.button('Submit', type = 'primary'):
         tk = 1
 if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
