@@ -374,7 +374,7 @@ with col2:
     destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
     if st.button('Submit', type = 'primary'):
         tk = 1
-if tk == 1:
+if tk == 1 or st.session_state.load_state:
     st.session_state.load_state = True
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
