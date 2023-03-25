@@ -26,7 +26,6 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 import base64
 from streamlit_option_menu import option_menu
-from src.pages.sessionState import SessionState
 
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
@@ -365,6 +364,8 @@ def add_bg_from_url():
 st.set_page_config(layout='wide', page_title="Bird's Eye")
 add_bg_from_url()
 tk = 0
+if "load_state" not in st.session_state:
+    st.session_state.load_state = False
 st.title("Predict Flight Path Between Two Locations :airplane:")
 col1, col2 = st.columns(2)
 with col1:
@@ -373,7 +374,8 @@ with col2:
     destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
     if st.button('Submit', type = 'primary'):
         tk = 1
-if tk == 1:
+if tk == 1 or st.session_state.load_state:
+    st.session_state.load_state = True
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     a_list, flight,s,e = main_function(x, y)
@@ -387,7 +389,6 @@ if tk == 1:
         "nav-link": {"color":"white", "font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#780000", "border" : "2px #fb6f92"},
         "nav-link-selected": {"background-color": "#370617"},
         })
-        session_state = SessionState.get(col1=False, col2=False)
         if selected == 'Prediction':
             session_state.col1 = True
             session_state.col2 = False
