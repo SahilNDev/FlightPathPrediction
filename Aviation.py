@@ -379,7 +379,7 @@ if tk == 1:
     st.write(type(a_list))
     if type(a_list) is list:
         x = model_implementation(a_list)
-        selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="vertical", icons = ['gear-wide-connected', 'bar-chart-line'],
+        selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="horizontal", icons = ['gear-wide-connected', 'bar-chart-line'],
         styles={
         "container": {"padding": "0!important", "background-color": "#9d0208", "max-width": "100%"},
         "icon": {"color": "orange", "font-size": "18px"}, 
