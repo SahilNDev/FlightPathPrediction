@@ -27,7 +27,7 @@ from keras.callbacks import EarlyStopping
 import base64
 from streamlit_option_menu import option_menu
 
-@st.experimental_memo(suppress_st_warning=True)
+@st.experimental_memo(st.cache(suppress_st_warning=True))
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
