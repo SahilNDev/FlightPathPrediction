@@ -364,18 +364,18 @@ def add_bg_from_url():
 st.set_page_config(layout='wide', page_title="Bird's Eye")
 add_bg_from_url()
 tk = 0
-if "load_state" not in st.session_state:
-    st.session_state.load_state = False
 st.title("Predict Flight Path Between Two Locations :airplane:")
 col1, col2 = st.columns(2)
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
 with col2:
     destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
-    if st.button('Submit', type = 'primary'):
+    if "submit_state" not in st.session_state:
+        st.session_state.submit_state = False
+    if st.button('Submit'):
         tk = 1
-if tk == 1 or st.session_state.selected_state:
-    st.session_state.selected_state = True
+if tk == 1 or st.session_state.submit_state:
+    st.session_state.submit_state = True
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     a_list, flight,s,e = main_function(x, y)
