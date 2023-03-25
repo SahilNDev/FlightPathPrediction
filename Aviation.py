@@ -26,11 +26,9 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 import base64
 from streamlit_option_menu import option_menu
-
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
-
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
     for i in range(len(dataset)-look_back-look_ahead):
@@ -379,6 +377,7 @@ if tk == 1 or st.session_state.load_state:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     a_list, flight,s,e = main_function(x, y)
+    st.write(type(a_list))
     if type(a_list) is list:
         x = model_implementation(a_list)
         selected = option_menu(None, ['Prediction', 'Analysis'], menu_icon="cast", default_index=0, orientation="horizontal", icons = ['gear-wide-connected', 'bar-chart-line'],
@@ -394,7 +393,6 @@ if tk == 1 or st.session_state.load_state:
                     st.write(j)
                 st.pyplot(i[-2])
                 st.pyplot(i[-1])
-
         if selected == 'Analysis':
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}.csv".format(i))
