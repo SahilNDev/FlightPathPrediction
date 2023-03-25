@@ -168,7 +168,7 @@ def convertingToKML(file,s,e, flight):
 	  	    </gx:Tour></kml>""")
     f1.close()
     f2.close()
-    f = open(r"KML-Files/{}.kml".format(file),'r')
+    f = open(r"KML-Files/{}-{}.kml".format(flight,file),'r')
     st.markdown(get_download_link(f.read(), file, "kml"), unsafe_allow_html = True)
     f.close()
 def time_difference(t1, t2):
