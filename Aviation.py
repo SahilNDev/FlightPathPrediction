@@ -37,10 +37,10 @@ def create_dataset(dataset, look_back, look_ahead):
         X.append(a)
         Y.append(dataset[i + look_back + look_ahead - 1, 0])
     return np.array(X), np.array(Y)
-def model_implementation(files):
+def model_implementation(files, flight):
     dataframelist = []
     for i in files:
-        df_new = pd.read_csv(r'Datasets/{}.csv'.format(i))
+        df_new = pd.read_csv(r'Datasets/{}-{}.csv'.format(flight, i))
         #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
         daylist = np.array(df_new['Time (EDT)'])
         count1 = df_new['Time (EDT)'].first_valid_index()
@@ -133,11 +133,11 @@ def model_implementation(files):
         imp_array.append(arr)
     return imp_array
 	
-def convertingToKML(file,s,e):
-    f1 = open(r"Datasets/{}.csv".format(file), 'r', encoding = 'utf-8')
+def convertingToKML(file,s,e, flight):
+    f1 = open(r"Datasets/{}-{}.csv".format(flight, file), 'r', encoding = 'utf-8')
     st.markdown(get_download_link(f1.read(), file, "csv"), unsafe_allow_html = True)
     reader = csv.reader(f1)
-    f2 = open(r"KML-Files/{}.kml".format(file),'w')
+    f2 = open(r"KML-Files/{}-{}.kml".format(flight, file),'w')
     f2.write(f"""<?xml version="1.0" encoding="UTF-8"?>
 	    <kml xmlns="http://www.opengis.net/kml/2.2"
   	    xmlns:gx="http://www.google.com/kml/ext/2.2">
@@ -169,8 +169,7 @@ def convertingToKML(file,s,e):
     f1.close()
     f2.close()
     f = open(r"KML-Files/{}.kml".format(file),'r')
-    fie = f.read()
-    st.markdown(get_download_link(fie, file, "kml"), unsafe_allow_html = True)
+    st.markdown(get_download_link(f.read(), file, "kml"), unsafe_allow_html = True)
     f.close()
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
@@ -280,10 +279,8 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
         d = df['m/s'][n-1] - (deceleration/2)
         lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][n-1], df['Longitude'][n-1],  df['meters'][n-1], d/1000, df['Course'][n-1], 0)
         df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], (df['m/s'][n-1]-deceleration)*9/4, alt2, df['Rate'][n-1], '', 1, df['m/s'][n-1]-deceleration, d, 0]
-    fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}-{}-{}".format(flight, url[-27:-25], url[-29:-27], url[-33:-29]))
-    #st.plotly_chart(fig, use_container_width = True)
     x = "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
-    df.to_csv(r"Datasets/{}.csv".format(x), index = False)
+    df.to_csv(r"Datasets/{}-{}.csv".format(flight, x), index = False)
     return x
     
     
@@ -321,17 +318,7 @@ def main_function(airport1, airport2):
                         break
             elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
             elevation2 = airports[airports['gps_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
-            if len(flight_links) == 5:                
-                path = os.getcwd() + '/Datasets'
-                files = os.listdir(path)
-                for i in files:
-                    if "csv" in i:
-                        os.remove(path + r'/{}'.format(i))
-                path1 = os.getcwd() + '/KML-Files'
-                files1 = os.listdir(path1)
-                for i in files1:
-                    if "kml" in i:
-                        os.remove(path1 + r'/{}'.format(i))
+            if len(flight_links) == 5:
                 fileslist = []
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
@@ -376,7 +363,7 @@ if tk == 1:
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
     a_list, flight,s,e = main_function(x, y)
     if type(a_list) is list:
-        x = model_implementation(a_list)
+        x = model_implementation(a_list, flight)
         st.markdown('Prediction:')
         for i in x:
             for j in i[:-2]:
@@ -385,7 +372,7 @@ if tk == 1:
             st.pyplot(i[-1])
         st.markdown('Analysis:'	)
         for i in a_list:
-            df = pd.read_csv(r"Datasets/{}.csv".format(i))
+            df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
             fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
             st.plotly_chart(fig, use_container_width = True)
-            convertingToKML(i, s, e)
+            convertingToKML(i, s, e, flight)
