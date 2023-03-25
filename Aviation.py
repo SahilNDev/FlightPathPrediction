@@ -398,7 +398,7 @@ if tk == 1 or st.session_state.load_state:
                     st.write(j)
                 st.pyplot(i[-2])
                 st.pyplot(i[-1])
-        if selected == 'Analysis':
+        else:
             st.session_state.a_state = True
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}.csv".format(i))
