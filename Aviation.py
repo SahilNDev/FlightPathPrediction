@@ -93,7 +93,7 @@ def model_implementation(files, flight):
         X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
         model = Sequential()
         model.add(LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2]), return_sequences=True))
-	model.add(LSTM(64))
+        model.add(LSTM(64))
         model.add(Dropout(0.2))
         model.add(Dense(1))
         model.compile(loss='mean_squared_error', optimizer='adam')
