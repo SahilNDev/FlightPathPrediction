@@ -364,15 +364,17 @@ with col2:
 if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
-    st.write("Scraping is going on....")
+    placeholder = st.empty()
+    placeholder.text("Scraping is going on....")
     a_list, flight,s,e = main_function(x, y)
     if type(a_list) is list:
-        st.write("Scraping has been done successfully")
+        placeholder.text("Scraping has been done successfully")
         st.write("Flight in consideration is {}".format(flight))
-        st.write("Model Training in progress....")
+        plceholder.text("Model Training in progress....")
         x = model_implementation(a_list, flight)
-        st.write("Model Training successful")
+        placeholder.text("Model Training successful")
         tab1, tab2 = st.tabs(["Prediction","Analysis"])
+        placeholder.empty()
         tab1.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
         l1, l2 = convertingToKML('Predicted', s, e, flight)
         tab1.markdown(l1, unsafe_allow_html = True)
