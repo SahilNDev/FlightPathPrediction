@@ -41,17 +41,6 @@ def model_implementation(files, flight):
     for i in files:
         df_new = pd.read_csv(r'Datasets/{}-{}.csv'.format(flight, i))
         #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
-        daylist = np.array(df_new['Time (EDT)'])
-        count1 = df_new['Time (EDT)'].first_valid_index()
-        count2 = df_new['Time (EDT)'].last_valid_index()
-        strday = daylist[count1][:3]
-        df_new['date_time'] = np.nan
-        for j in range(count1, count2+1):
-            day2 = daylist[j][:3]
-            if(strday==day2):
-                df_new['date_time'][j] = i + daylist[j][3:]
-            else:
-                df_new['date_time'][j] = str(int(i[:2]) + 1) + i[2:] + daylist[j][3:]
         dataframelist.append(df_new)
     for df in dataframelist:
         df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
@@ -251,38 +240,6 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     for i in range(len(data_csv)):
         df.loc[i] = data_csv[i]
 
-    time = 1
-    diff = df['tilt'][1]/(2*((df['meters'][0] - s_elevation+10)/(df['m/s'][0]*sin(radians(df['tilt'][1])))))
-    while df['meters'][0]> s_elevation+10:
-        d = df['m/s'][0]*time
-        lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][0], df['Longitude'][0], df['meters'][0], d*-1/1000, df['Course'][0] ,df['tilt'][1])
-        df['Time Diff'][0] = time
-        df['tilt'][0] = df['tilt'][1]-diff
-        df['Dist from lp'][0] = d
-        x  = pd.DataFrame([['', lat2, lon2, df['Course'][0], df['kts'][0], df['mph'][0], alt2, df['Rate'][0], '', 0, df['m/s'][0], 0, 0]], columns = df.columns)
-        df = pd.concat([x,df[:]]).reset_index(drop = True)
-    t1 = 10
-    acceleration = df['m/s'][0]/t1
-    for i in range(t1):
-        d = df['m/s'][0] - (acceleration/2)
-        lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][0], df['Longitude'][0], df['meters'][0], d*-1/1000, df['Course'][0], 0)
-        df['Time Diff'][0] = 1
-        df['Dist from lp'][0] = d
-        x = pd.DataFrame([['', lat2, lon2, df['Course'][0], df['kts'][0], (df['m/s'][0]-acceleration)*9/4, alt2, df['Rate'][0], '', 0, df['m/s'][0]-acceleration, 0, 0]], columns = df.columns)
-        df = pd.concat([x,df[:]]).reset_index(drop = True)
-    diff = df['tilt'][len(df)-1]/(df['meters'][len(df)-1] - (e_elevation+10)/(df['m/s'][len(df)-1]*sin(radians(df['tilt'][len(df)-1]))))
-    while df['meters'][len(df)-1] > e_elevation+10:
-        n = len(df)
-        d = df['m/s'][n-1] * time
-        lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][n-1], df['Longitude'][n-1],  df['meters'][n-1], d/1000, df['Course'][n-1], df['tilt'][n-1])
-        df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], df['mph'][n-1], alt2, df['Rate'][n-1], '', time, df['m/s'][n-1], d, df['tilt'][n-1] - diff]
-    t2 = 10
-    deceleration = df['m/s'][len(df)-1]/t2
-    for i in range(t2):
-        n = len(df)
-        d = df['m/s'][n-1] - (deceleration/2)
-        lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][n-1], df['Longitude'][n-1],  df['meters'][n-1], d/1000, df['Course'][n-1], 0)
-        df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], (df['m/s'][n-1]-deceleration)*9/4, alt2, df['Rate'][n-1], '', 1, df['m/s'][n-1]-deceleration, d, 0]
     x = "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     df.to_csv(r"Datasets/{}-{}.csv".format(flight, x), index = False)
     return x
