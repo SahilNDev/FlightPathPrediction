@@ -370,6 +370,8 @@ if tk == 1:
     if type(a_list) is list:
         placeholder.text("Scraping has been done successfully")
         st.write("Flight in consideration is {}".format(flight))
+        placeholder.empty()
+        placeholder = st.empty()
         placeholder.text("Model Training in progress....")
         x = model_implementation(a_list, flight)
         placeholder.text("Model Training successful")
