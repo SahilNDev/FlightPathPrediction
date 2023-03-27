@@ -170,11 +170,13 @@ def convertingToKML(file,s,e, flight):
     f1.close()
     f2.close()
     f1 = open(r"Datasets/{}-{}.csv".format(flight, file), 'r', encoding = 'utf-8')
-    st.markdown(get_download_link(f1.read(), file, "csv"), unsafe_allow_html = True)
+    l1 = get_download_link(f1.read(), file, "csv")
     f1.close()
     f = open(r"KML-Files/{}-{}.kml".format(flight,file),'r')
-    st.markdown(get_download_link(f.read(), file, "kml"), unsafe_allow_html = True)
+    l2 = get_download_link(f.read(), file, "kml")
     f.close()
+    return l1, l2
+
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
 def mph_to_mps(speed):
@@ -370,7 +372,9 @@ if tk == 1:
         x = model_implementation(a_list, flight)
         tab1, tab2 = st.tabs(["Prediction","Analysis"])
         tab1.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
-        convertingToKML('Predicted', s, e, flight)
+        l1, l2 = convertingToKML('Predicted', s, e, flight)
+        tab1.markdown(l1, unsafe_allow_html = True)
+        tab1.markdown(l2, unsafe_allow_html = True)
         for i in x:
             for j in i[:-2]:
                 tab1.write(j)
@@ -382,3 +386,5 @@ if tk == 1:
             fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
             tab2.plotly_chart(fig, use_container_width = True)
             convertingToKML(i, s, e, flight)
+            tab2.markdown(l1, unsafe_allow_html = True)
+            tab2.markdown(l2, unsafe_allow_html = True)
