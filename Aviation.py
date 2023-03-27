@@ -369,7 +369,9 @@ if tk == 1:
     if type(a_list) is list:
         st.write("Scraping has been done successfully")
         st.write("Flight in consideration is {}".format(flight))
+        st.write("Model Training in progress....")
         x = model_implementation(a_list, flight)
+        st.write("Model Training successful")
         tab1, tab2 = st.tabs(["Prediction","Analysis"])
         tab1.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
         l1, l2 = convertingToKML('Predicted', s, e, flight)
