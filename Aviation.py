@@ -42,11 +42,9 @@ def model_implementation(files, flight):
         df_new = pd.read_csv(r'Datasets/{}-{}.csv'.format(flight, i))
         #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
         daylist = np.array(df_new['Time (EDT)'])
-        count1 = df_new['Time (EDT)'].first_valid_index()
-        count2 = df_new['Time (EDT)'].last_valid_index()
         strday = daylist[count1][:3]
         df_new['date_time'] = np.nan
-        for j in range(count1, count2+1):
+        for j in range(df_new.shape[0]):
             day2 = daylist[j][:3]
             if(strday==day2):
                 df_new['date_time'][j] = i + daylist[j][3:]
@@ -55,16 +53,10 @@ def model_implementation(files, flight):
         dataframelist.append(df_new)
     for df in dataframelist:
         df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
-        count1 = df['date_time'].first_valid_index()
-        count2 = df['date_time'].last_valid_index()
-        for i in range(count1-1,-1,-1):
-            df['date_time'][i] = df['date_time'][i+1] - datetime.timedelta(seconds=1)
-        for i in range(count2+1, df.shape[0]):
-            df['date_time'][i] = df['date_time'][i-1] + datetime.timedelta(seconds=1)
-            df['day'] = df['date_time'].apply(lambda x: x.day)
-            df['hour'] = df['date_time'].apply(lambda x: x.hour)
-            df['minute'] = df['date_time'].apply(lambda x: x.minute)
-            df['second'] = df['date_time'].apply(lambda x: x.second)
+        df['day'] = df['date_time'].apply(lambda x: x.day)
+        df['hour'] = df['date_time'].apply(lambda x: x.hour)
+        df['minute'] = df['date_time'].apply(lambda x: x.minute)
+        df['second'] = df['date_time'].apply(lambda x: x.second)
     units = ['Latitude','Longitude','meters']
     imp_array = []
     predicted_df = dataframelist[-1]
