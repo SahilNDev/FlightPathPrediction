@@ -26,7 +26,6 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 import base64
 from streamlit_option_menu import option_menu
-
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
@@ -176,7 +175,6 @@ def convertingToKML(file,s,e, flight):
     l2 = get_download_link(f.read(), file, "kml")
     f.close()
     return l1, l2
-
 def time_difference(t1, t2):
     return (pd.to_datetime(t2) - pd.to_datetime(t1)).total_seconds()
 def mph_to_mps(speed):
@@ -252,7 +250,39 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
         data_csv[i].extend([time, mps, d, tilt])
     for i in range(len(data_csv)):
         df.loc[i] = data_csv[i]
-    
+
+    time = 1
+    diff = df['tilt'][1]/(2*((df['meters'][0] - s_elevation+10)/(df['m/s'][0]*sin(radians(df['tilt'][1])))))
+    while df['meters'][0]> s_elevation+10:
+        d = df['m/s'][0]*time
+        lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][0], df['Longitude'][0], df['meters'][0], d*-1/1000, df['Course'][0] ,df['tilt'][1])
+        df['Time Diff'][0] = time
+        df['tilt'][0] = df['tilt'][1]-diff
+        df['Dist from lp'][0] = d
+        x  = pd.DataFrame([['', lat2, lon2, df['Course'][0], df['kts'][0], df['mph'][0], alt2, df['Rate'][0], '', 0, df['m/s'][0], 0, 0]], columns = df.columns)
+        df = pd.concat([x,df[:]]).reset_index(drop = True)
+    t1 = 10
+    acceleration = df['m/s'][0]/t1
+    for i in range(t1):
+        d = df['m/s'][0] - (acceleration/2)
+        lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][0], df['Longitude'][0], df['meters'][0], d*-1/1000, df['Course'][0], 0)
+        df['Time Diff'][0] = 1
+        df['Dist from lp'][0] = d
+        x = pd.DataFrame([['', lat2, lon2, df['Course'][0], df['kts'][0], (df['m/s'][0]-acceleration)*9/4, alt2, df['Rate'][0], '', 0, df['m/s'][0]-acceleration, 0, 0]], columns = df.columns)
+        df = pd.concat([x,df[:]]).reset_index(drop = True)
+    diff = df['tilt'][len(df)-1]/(df['meters'][len(df)-1] - (e_elevation+10)/(df['m/s'][len(df)-1]*sin(radians(df['tilt'][len(df)-1]))))
+    while df['meters'][len(df)-1] > e_elevation+10:
+        n = len(df)
+        d = df['m/s'][n-1] * time
+        lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][n-1], df['Longitude'][n-1],  df['meters'][n-1], d/1000, df['Course'][n-1], df['tilt'][n-1])
+        df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], df['mph'][n-1], alt2, df['Rate'][n-1], '', time, df['m/s'][n-1], d, df['tilt'][n-1] - diff]
+    t2 = 10
+    deceleration = df['m/s'][len(df)-1]/t2
+    for i in range(t2):
+        n = len(df)
+        d = df['m/s'][n-1] - (deceleration/2)
+        lat2, lon2, alt2 = get_point_at_distance(df['Latitude'][n-1], df['Longitude'][n-1],  df['meters'][n-1], d/1000, df['Course'][n-1], 0)
+        df.loc[n] = ['', lat2, lon2, df['Course'][n-1], df['kts'][n-1], (df['m/s'][n-1]-deceleration)*9/4, alt2, df['Rate'][n-1], '', 1, df['m/s'][n-1]-deceleration, d, 0]
     x = "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     df.to_csv(r"Datasets/{}-{}.csv".format(flight, x), index = False)
     return x
