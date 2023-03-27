@@ -66,15 +66,15 @@ def model_implementation(files, flight):
             df['hour'] = df['date_time'].apply(lambda x: x.hour)
             df['minute'] = df['date_time'].apply(lambda x: x.minute)
             df['second'] = df['date_time'].apply(lambda x: x.second)
-    units = ['Latitude','Longitude','meters', 'Course', 'tilt']
+    units = ['Latitude','Longitude','meters']
     imp_array = []
     predicted_df = dataframelist[-1]
     for i in units:
         arr = []
         pr = dataframelist[-1][i][:6]
-        df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
+        df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second','Course', 'tilt']]
         for df in dataframelist[1:]:
-            df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second']]
+            df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
             df_update = pd.concat([df_update, df_lat], axis=0)
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
