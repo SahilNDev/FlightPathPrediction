@@ -42,7 +42,7 @@ def model_implementation(files, flight):
         df_new = pd.read_csv(r'Datasets/{}-{}.csv'.format(flight, i))
         #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
         daylist = np.array(df_new['Time (EDT)'])
-        strday = daylist[count1][:3]
+        strday = daylist[0][:3]
         df_new['date_time'] = np.nan
         for j in range(df_new.shape[0]):
             day2 = daylist[j][:3]
