@@ -41,6 +41,17 @@ def model_implementation(files, flight):
     for i in files:
         df_new = pd.read_csv(r'Datasets/{}-{}.csv'.format(flight, i))
         #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
+        daylist = np.array(df_new['Time (EDT)'])
+        count1 = df_new['Time (EDT)'].first_valid_index()
+        count2 = df_new['Time (EDT)'].last_valid_index()
+        strday = daylist[count1][:3]
+        df_new['date_time'] = np.nan
+        for j in range(count1, count2+1):
+            day2 = daylist[j][:3]
+            if(strday==day2):
+                df_new['date_time'][j] = i + daylist[j][3:]
+            else:
+                df_new['date_time'][j] = str(int(i[:2]) + 1) + i[2:] + daylist[j][3:]
         dataframelist.append(df_new)
     for df in dataframelist:
         df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
@@ -239,7 +250,6 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
         data_csv[i].extend([time, mps, d, tilt])
     for i in range(len(data_csv)):
         df.loc[i] = data_csv[i]
-
     x = "{}-{}-{}".format(url[-27:-25], url[-29:-27], url[-33:-29])
     df.to_csv(r"Datasets/{}-{}.csv".format(flight, x), index = False)
     return x
