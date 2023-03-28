@@ -348,6 +348,6 @@ if tk == 1:
             df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
             fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
             tab2.plotly_chart(fig, use_container_width = True)
-            convertingToKML(i, s, e, flight)
+            l1, l2 = convertingToKML(i, s, e, flight)
             tab2.markdown(l1, unsafe_allow_html = True)
             tab2.markdown(l2, unsafe_allow_html = True)
