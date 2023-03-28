@@ -349,10 +349,11 @@ if tk == 1:
         
 	
         if selected == 'Analysis':
-            for i in a_list:
-                df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
-                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
-                st.plotly_chart(fig, use_container_width = True)
-                l1, l2 = convertingToKML(i, s, e, flight)
-                st.markdown(l1, unsafe_allow_html = True)
-                st.markdown(l2, unsafe_allow_html = True)
+	    with st.container():
+                for i in a_list:
+                    df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
+                    fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
+                    st.plotly_chart(fig, use_container_width = True)
+                    l1, l2 = convertingToKML(i, s, e, flight)
+                    st.markdown(l1, unsafe_allow_html = True)
+                    st.markdown(l2, unsafe_allow_html = True)
