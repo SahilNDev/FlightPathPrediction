@@ -334,8 +334,8 @@ if tk == 1:
         placeholder.text("Model Training in progress....")
         x = model_implementation(a_list, flight)
         placeholder.text("Model Training successful")
+        selected = option_menu(None, ['Prediciton','Analysis'], icons=['gear-wide-connected','bar-chart-line'], menu_icon="cast", default_index=0, orientation="horizontal")
         placeholder.empty()
-	selected = option_menu(None, ['Prediciton','Analysis'], icons=['gear-wide-connected','bar-chart-line'], menu_icon="cast", default_index=0, orientation="horizontal")
 	if selected == 'Prediction':
             with st.container():
                 l1, l2 = convertingToKML('Predicted', s, e, flight)
