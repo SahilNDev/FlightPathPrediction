@@ -63,9 +63,9 @@ def model_implementation(files, flight):
     for i in units:
         arr = []
         pr = dataframelist[-1][i][:6]
-        df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second','Course', 'tilt']]
+        df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
         for df in dataframelist[1:]:
-            df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
+            df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second']]
             df_update = pd.concat([df_update, df_lat], axis=0)
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
