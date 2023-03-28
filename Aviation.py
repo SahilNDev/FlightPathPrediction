@@ -336,7 +336,7 @@ if tk == 1:
         placeholder.text("Model Training successful")
         selected = option_menu(None, ['Prediciton','Analysis'], icons=['gear-wide-connected','bar-chart-line'], menu_icon="cast", default_index=0, orientation="horizontal")
         placeholder.empty()
-	if selected == 'Prediction':
+        if selected == 'Prediction':
             with st.container():
                 l1, l2 = convertingToKML('Predicted', s, e, flight)
                 st.markdown(l1, unsafe_allow_html = True)
@@ -348,7 +348,7 @@ if tk == 1:
                     st.pyplot(i[-1])
         
 	
-	if selected == 'Analysis':
+        if selected == 'Analysis':
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
