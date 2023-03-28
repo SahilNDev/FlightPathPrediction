@@ -63,9 +63,9 @@ def model_implementation(files, flight):
     for i in units:
         arr = []
         pr = dataframelist[-1][i][:6]
-        df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
+        df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
         for df in dataframelist[1:]:
-            df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second']]
+            df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
             df_update = pd.concat([df_update, df_lat], axis=0)
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
@@ -83,12 +83,12 @@ def model_implementation(files, flight):
         X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
         X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
         model = Sequential()
-        model.add(LSTM(128, input_shape=(X_train.shape[1], X_train.shape[2]), return_sequences=True))
-        model.add(LSTM(64))
+        model.add(LSTM(256, input_shape=(X_train.shape[1], X_train.shape[2])))
+        #model.add(LSTM(64))
         model.add(Dropout(0.2))
         model.add(Dense(1))
         model.compile(loss='mean_squared_error', optimizer='adam')
-        history = model.fit(X_train, Y_train, epochs=16, batch_size=32, validation_data=(X_test, Y_test), 
+        history = model.fit(X_train, Y_train, epochs=10, batch_size=16, validation_data=(X_test, Y_test), 
                     callbacks=[EarlyStopping(monitor='val_loss', patience=5)], verbose=1, shuffle=False)
         train_predict = model.predict(X_train)
         test_predict = model.predict(X_test)
