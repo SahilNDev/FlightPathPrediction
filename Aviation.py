@@ -349,7 +349,7 @@ if tk == 1:
         
 	
         if selected == 'Analysis':
-	    with st.container():
+            with st.container():
                 for i in a_list:
                     df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
                     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
