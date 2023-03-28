@@ -26,6 +26,8 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.callbacks import EarlyStopping
 import base64
 from streamlit_option_menu import option_menu
+
+
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
@@ -332,22 +334,25 @@ if tk == 1:
         placeholder.text("Model Training in progress....")
         x = model_implementation(a_list, flight)
         placeholder.text("Model Training successful")
-        tab1, tab2 = st.tabs(["Prediction","Analysis"])
         placeholder.empty()
-        tab1.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
-        l1, l2 = convertingToKML('Predicted', s, e, flight)
-        tab1.markdown(l1, unsafe_allow_html = True)
-        tab1.markdown(l2, unsafe_allow_html = True)
-        for i in x:
-            for j in i[:-2]:
-                tab1.write(j)
-            tab1.pyplot(i[-2])
-            tab1.pyplot(i[-1])
-        tab2.markdown('<h1>Analysis:</h1>', unsafe_allow_html = True)
-        for i in a_list:
-            df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
-            fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
-            tab2.plotly_chart(fig, use_container_width = True)
-            l1, l2 = convertingToKML(i, s, e, flight)
-            tab2.markdown(l1, unsafe_allow_html = True)
-            tab2.markdown(l2, unsafe_allow_html = True)
+	selected = option_menu(None, ['Prediciton','Analysis'], icons=['gear-wide-connected','bar-chart-line'], menu_icon="cast", default_index=0, orientation="horizontal")
+	if selected == 'Prediction':
+            with st.container():
+                l1, l2 = convertingToKML('Predicted', s, e, flight)
+                st.markdown(l1, unsafe_allow_html = True)
+                st.markdown(l2, unsafe_allow_html = True)
+                for i in x:
+                    for j in i[:-2]:
+                        st.write(j)
+                    st.pyplot(i[-2])
+                    st.pyplot(i[-1])
+        
+	
+	if selected == 'Analysis':
+            for i in a_list:
+                df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
+                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
+                st.plotly_chart(fig, use_container_width = True)
+                l1, l2 = convertingToKML(i, s, e, flight)
+                st.markdown(l1, unsafe_allow_html = True)
+                st.markdown(l2, unsafe_allow_html = True)
