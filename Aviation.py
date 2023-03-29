@@ -27,6 +27,7 @@ from keras.callbacks import EarlyStopping
 import base64
 from streamlit_option_menu import option_menu
 from datetime import datetime
+import pytz
 
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
@@ -311,7 +312,7 @@ def add_bg_from_url():
      )
 st.set_page_config(layout='wide', page_title="Bird's Eye", page_icon = "https://toppng.com/uploads/preview/transparent-background-airplane-11549404876oivb2vpwwf.png")
 add_bg_from_url()
-st.write(datetime.now())
+st.write(datetime.now(pytz.timezone('Asia/Kolkata')))
 tk = 0
 st.title("Predict Flight Path Between Two Locations :airplane:")
 col1, col2 = st.columns(2)
