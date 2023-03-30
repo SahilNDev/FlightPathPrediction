@@ -253,19 +253,23 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
 def main_function(airport1, airport2):
     airports = pd.read_csv("in-airports.csv")
     main_url = "https://uk.flightaware.com"
-    url_extract = requests.get(main_url + "/live/findflight?origin={}&destination={}".format(airport1, airport2)).text
+    url_extract = requests.get(main_url + "/live/airport/{}".format(airport1)).text
     s = airports[airports['gps_code'] == airport1].reset_index(drop = True)['municipality'][0]
-    e = airports[airports['gps_code'] == airport2].reset_index(drop = True)['municipality'][0]
+    e = airports[airports['iata_code'] == airport2].reset_index(drop = True)['municipality'][0]
     soup = BeautifulSoup(url_extract, 'lxml')
-    table = soup.find_all('tr', class_ = "ffinder-results-row-bordertop ffinder-results-row")
-    set1 = set()
-    for i in table:
-        x = re.findall(r'url="/live/flight/id/[A-Z0-9]+', str(i))[0][21:]
-        set1.add(x)
+    tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
+    trs = []
+    for i in tables:
+        trs.extend(i.find_all('tr'))
+    flights = []
+    for i in trs:
+        if airport2 in i.text:
+            tds = i.find_all('td')
+            flights.append(tds[0].text.replace(" ","")
     
     try:
         while True:
-            flight = random.choice(list(set1))
+            flight = random.choice(flights)
             url_extract = requests.get(main_url + "/live/flight/{}/history".format(flight)).text
             soup = BeautifulSoup(url_extract, 'lxml')
             new_table = soup.find('table', class_ = "prettyTable fullWidth tablesaw tablesaw-stack")
@@ -324,7 +328,7 @@ with col2:
         tk = 1
 if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
-    y = df[df['Display Name'] == destination].reset_index(drop=True)['gps_code'][0]
+    y = df[df['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
     placeholder = st.empty()
     placeholder.text("Scraping is going on....")
     a_list, flight,s,e = main_function(x, y)
