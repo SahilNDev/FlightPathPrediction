@@ -357,7 +357,7 @@ if tk == 1:
             df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
             fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
             tab2.plotly_chart(fig)
-            m = folium.Map(location=[df.latitude.mean(), df.longitude.mean()],zoom_start=3,control_scale=True)
+            m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=3,control_scale=True)
             loc = []
             for i,rows in df.iterrows():
                 loc.append((row['Latitude'], row['Longitude']))
