@@ -329,6 +329,8 @@ with col2:
 if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
+    st.write(x)
+    st.write(y)
     placeholder = st.empty()
     placeholder.text("Scraping is going on....")
     a_list, flight,s,e = main_function(x, y)
