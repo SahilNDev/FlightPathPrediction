@@ -357,6 +357,6 @@ if tk == 1:
             fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
             tab2.plotly_chart(fig)
             l1, l2 = convertingToKML(i, s, e, flight)
-            with tab2.expander("Download Files"):
+            with st.expander("Download Files"):
                 tab2.markdown(l1, unsafe_allow_html = True)
                 tab2.markdown(l2, unsafe_allow_html = True)
