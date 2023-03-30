@@ -72,6 +72,7 @@ smmap==5.0.0
 soupsieve==2.4
 statsmodels==0.13.5
 streamlit-option-menu
+streamlit-folium
 tenacity==8.2.2
 tensorboard==2.11.2
 tensorboard-data-server==0.6.1
