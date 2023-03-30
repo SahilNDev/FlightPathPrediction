@@ -267,12 +267,10 @@ def main_function(airport1, airport2):
         if airport2 in i.text:
             tds = i.find_all('td')
             flights.append(tds[0].text.replace(" ",""))
-    st.write(flights)
 
     try:
         while True:
             flight = flights[0]
-            st.write(flight)
             url_extract = requests.get(main_url + "/live/flight/{}/history".format(flight)).text
             soup = BeautifulSoup(url_extract, 'lxml')
             new_table = soup.find('table', class_ = "prettyTable fullWidth tablesaw tablesaw-stack")
@@ -332,8 +330,6 @@ with col2:
 if tk == 1:
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     y = df[df['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
-    st.write(x)
-    st.write(y)
     placeholder = st.empty()
     placeholder.text("Scraping is going on....")
     a_list, flight,s,e = main_function(x, y)
