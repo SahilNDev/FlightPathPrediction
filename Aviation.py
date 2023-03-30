@@ -295,7 +295,7 @@ def main_function(airport1, airport2):
                     fileslist.insert(0, file)
                 return fileslist, flight,s,e
             else:
-                set1.remove(flight)
+                flights.remove(flight)
     except Exception as ex:
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
         return "", "", "", ""
