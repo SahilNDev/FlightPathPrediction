@@ -290,7 +290,7 @@ def main_function(airport1, airport2):
                     if len(flight_links) == 5:
                         break
             elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
-            elevation2 = airports[airports['gps_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
+            elevation2 = airports[airports['iata_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
             if len(flight_links) == 5:
                 fileslist = []
                 for i in range(5):
