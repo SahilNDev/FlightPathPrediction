@@ -256,6 +256,7 @@ def main_function(airport1, airport2):
     url_extract = requests.get(main_url + "/live/airport/{}".format(airport1)).text
     s = airports[airports['gps_code'] == airport1].reset_index(drop = True)['municipality'][0]
     e = airports[airports['iata_code'] == airport2].reset_index(drop = True)['municipality'][0]
+    st.write(airport1, airport2, s, e)
     soup = BeautifulSoup(url_extract, 'lxml')
     tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
     trs = []
