@@ -66,9 +66,9 @@ def model_implementation(files, flight):
     for i in units:
         arr = []
         pr = dataframelist[-1][i][:6]
-        df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
+        df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second']]
         for df in dataframelist[1:]:
-            df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
+            df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second']]
             df_update = pd.concat([df_update, df_lat], axis=0)
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
@@ -312,7 +312,7 @@ def add_bg_from_url():
      )
 st.set_page_config(layout='wide', page_title="Bird's Eye", page_icon = "https://toppng.com/uploads/preview/transparent-background-airplane-11549404876oivb2vpwwf.png")
 add_bg_from_url()
-st.write(datetime.now(pytz.timezone('Asia/Kolkata')))
+#st.write(datetime.now(pytz.timezone('Asia/Kolkata')))
 tk = 0
 st.title("Predict Flight Path Between Two Locations :airplane:")
 col1, col2 = st.columns(2)
