@@ -360,7 +360,7 @@ if tk == 1:
             m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=3,control_scale=True)
             loc = []
             for i,rows in df.iterrows():
-                loc.append((row['Latitude'], row['Longitude']))
+                loc.append((rows['Latitude'], rows['Longitude']))
             folium.PolyLine(loc, color = 'red', weight=15, opacity = 0.8).add_to(m)
             folium_static(m)
             l1, l2 = convertingToKML(i, s, e, flight)
