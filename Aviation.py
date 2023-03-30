@@ -271,7 +271,7 @@ def main_function(airport1, airport2):
 
     try:
         while True:
-            flight = random.choice(flights)
+            flight = flights[0]
             st.write(flight)
             url_extract = requests.get(main_url + "/live/flight/{}/history".format(flight)).text
             soup = BeautifulSoup(url_extract, 'lxml')
