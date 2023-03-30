@@ -266,7 +266,7 @@ def main_function(airport1, airport2):
         if airport2 in i.text:
             tds = i.find_all('td')
             flights.append(tds[0].text.replace(" ",""))
-
+    st.write(flights)
     try:
         while True:
             flight = flights[0]
@@ -298,7 +298,7 @@ def main_function(airport1, airport2):
                 set1.remove(flight)
     except Exception as ex:
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
-        return
+        return "", "", "", ""
     
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
