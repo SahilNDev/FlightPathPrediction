@@ -373,7 +373,7 @@ if tk == 1:
             folium_static(m)
             x = "Download Files:"
             exp = st.expander(x)
-            ChangeWidgetFontSize(x, '16px')
+            ChangeWidgetFontSize(x, '20px')
             with exp:
                 l1, l2 = convertingToKML('Predicted', s, e, flight)
                 st.markdown(l1, unsafe_allow_html = True)
@@ -400,7 +400,7 @@ if tk == 1:
                 folium_static(m)
                 x = "Download Files:"
                 exp = st.expander(x)
-                ChangeWidgetFontSize(x, '16px')
+                ChangeWidgetFontSize(x, '20px')
                 with exp:
                     l1, l2 = convertingToKML(i, s, e, flight)
                     st.markdown(l1, unsafe_allow_html = True)
