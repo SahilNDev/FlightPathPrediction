@@ -304,7 +304,6 @@ def main_function(airport1, airport2):
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
-                st.write(og)
                 return fileslist,flight,s,e,og
             else:
                 flights.remove(flight)
