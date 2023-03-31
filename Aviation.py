@@ -343,26 +343,28 @@ if tk == 1:
         placeholder.text("Model Training successful")
         tab1, tab2 = st.tabs(["Prediction","Analysis"])
         placeholder.empty()
-        tab1.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
-        l1, l2 = convertingToKML('Predicted', s, e, flight)
-        tab1.markdown(l1, unsafe_allow_html = True)
-        tab1.markdown(l2, unsafe_allow_html = True)
-        for i in x:
-            for j in i[:-2]:
-                tab1.write(j)
-            tab1.pyplot(i[-2])
-            tab1.pyplot(i[-1])
-        tab2.markdown('<h1>Analysis:</h1>', unsafe_allow_html = True)
-        for i in a_list:
-            df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
-            fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
-            tab2.plotly_chart(fig)
-            m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=3,control_scale=True)
-            loc = []
-            for r,rows in df.iterrows():
-                loc.append((rows['Latitude'], rows['Longitude']))
-            folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
-            st_folium(m)
-            l1, l2 = convertingToKML(i, s, e, flight)
-            tab2.markdown(l1, unsafe_allow_html = True)
-            tab2.markdown(l2, unsafe_allow_html = True)
+        with tab1:
+            st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
+            l1, l2 = convertingToKML('Predicted', s, e, flight)
+            st.markdown(l1, unsafe_allow_html = True)
+            st.markdown(l2, unsafe_allow_html = True)
+            for i in x:
+                for j in i[:-2]:
+                    st.write(j)
+                st.pyplot(i[-2])
+                st.pyplot(i[-1])
+        with tab2:
+            st.markdown('<h1>Analysis:</h1>', unsafe_allow_html = True)
+            for i in a_list:
+                df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
+                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
+                st.plotly_chart(fig)
+                m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=3,control_scale=True)
+                loc = []
+                for r,rows in df.iterrows():
+                    loc.append((rows['Latitude'], rows['Longitude']))
+                folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
+                st_folium(m)
+                l1, l2 = convertingToKML(i, s, e, flight)
+                st.markdown(l1, unsafe_allow_html = True)
+                st.markdown(l2, unsafe_allow_html = True)
