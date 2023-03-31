@@ -363,11 +363,11 @@ if tk == 1:
         placeholder.text("Model Training in progress....")
         results = model_implementation(a_list, flight)
         placeholder.text("Model Training successful")
-        listTabs = ['Prediction','Present Flight','Analysis']
+        listTabs = ['Prediction','Ongoing Flight','Analysis']
         tab1, tab2, tab3 = st.tabs(listTabs)
         ChangeWidgetFontSize(listTabs[0], '24px')
         ChangeWidgetFontSize(listTabs[1], '24px')
-        ChangeWidgetFontSize(listTabs[1], '24px')
+        ChangeWidgetFontSize(listTabs[2], '24px')
         placeholder.empty()
         with tab1:
             df = pd.read_csv(r"Datasets/{}-Predicted.csv".format(flight))
@@ -398,10 +398,9 @@ if tk == 1:
                 st.pyplot(results[i][-2])
                 st.pyplot(results[i][-1])
         with tab2:
-            st.markdown("<h1>Presnt Flight:</h1>", unsafe_allow_html=True)
+            st.markdown("<h1>Ongoing Flight:</h1>", unsafe_allow_html=True)
             if og != "":
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
-                st.subheader("Ongoing Flight:")
                 st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
                 st.plotly_chart(fig)
