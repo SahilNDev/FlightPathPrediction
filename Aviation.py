@@ -30,6 +30,7 @@ from datetime import datetime
 import pytz
 import folium
 from streamlit_folium import st_folium, folium_static
+import streamlit.components.v1 as components
 
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
