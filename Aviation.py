@@ -363,27 +363,13 @@ if tk == 1:
         placeholder.text("Model Training in progress....")
         results = model_implementation(a_list, flight)
         placeholder.text("Model Training successful")
-        listTabs = ['Prediction','Analysis']
-        tab1, tab2 = st.tabs(listTabs)
+        listTabs = ['Prediction','Present Flight','Analysis']
+        tab1, tab2, tab3 = st.tabs(listTabs)
         ChangeWidgetFontSize(listTabs[0], '24px')
+        ChangeWidgetFontSize(listTabs[1], '24px')
         ChangeWidgetFontSize(listTabs[1], '24px')
         placeholder.empty()
         with tab1:
-            if og != "":
-                df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
-                st.subheader("Ongoing Flight:")
-                st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
-                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
-                st.plotly_chart(fig)
-                st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
-                m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
-                loc = []
-                for r,rows in df.iterrows():
-                    loc.append((rows['Latitude'], rows['Longitude']))
-                folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
-                folium_static(m)
-            else:
-               st.subheader("This flight is not ongoing, it is scheduled to start soon.")
             df = pd.read_csv(r"Datasets/{}-Predicted.csv".format(flight))
             st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
             st.subheader("Predicted Flight")
@@ -412,6 +398,23 @@ if tk == 1:
                 st.pyplot(results[i][-2])
                 st.pyplot(results[i][-1])
         with tab2:
+            st.markdown("<h1>Presnt Flight:</h1>", unsafe_allow_html=True)
+            if og != "":
+                df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
+                st.subheader("Ongoing Flight:")
+                st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
+                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
+                st.plotly_chart(fig)
+                st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
+                m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
+                loc = []
+                for r,rows in df.iterrows():
+                    loc.append((rows['Latitude'], rows['Longitude']))
+                folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
+                folium_static(m)
+            else:
+               st.subheader("This flight is not ongoing, it is scheduled to start soon.")
+        with tab3:
             st.markdown('<h1>Analysis:</h1>', unsafe_allow_html = True)
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
