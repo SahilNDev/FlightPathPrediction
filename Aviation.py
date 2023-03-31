@@ -359,15 +359,17 @@ if tk == 1:
                 col1, clo2 = st.columns(2)
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
                 with col1:
+                    col1.subheader("Trajectory:")
                     fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
                     st.plotly_chart(fig)
                 with col2:
-                    m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=3,control_scale=True)
+                    col2.subheader("Path on Map:")
+                    m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
                     loc = []
                     for r,rows in df.iterrows():
                         loc.append((rows['Latitude'], rows['Longitude']))
                     folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
-                    st_folium(m)
+                    folium_static(m)
                 l1, l2 = convertingToKML(i, s, e, flight)
                 st.markdown(l1, unsafe_allow_html = True)
                 st.markdown(l2, unsafe_allow_html = True)
