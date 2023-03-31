@@ -285,7 +285,7 @@ def main_function(airport1, airport2):
             elevation2 = airports[airports['iata_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
             og = ""
             if airport1 in table_body[0].text and airport2 in table_body[0].text and 'On The Way!' in table_body[0].text:
-		x = re.findall(r'a href="[/a-zA-Z0-9]+', str(i))[0][8:]
+                x = re.findall(r'a href="[/a-zA-Z0-9]+', str(i))[0][8:]
                 og = scraping_function(main_url+x+"/tracklog",elevation1,elevation2,flight,s,e)
             flight_links = []
             for i in table_body:
