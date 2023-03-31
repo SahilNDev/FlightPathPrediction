@@ -359,9 +359,24 @@ if tk == 1:
         placeholder.empty()
         with tab1:
             st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
-            l1, l2 = convertingToKML('Predicted', s, e, flight)
-            st.markdown(l1, unsafe_allow_html = True)
-            st.markdown(l2, unsafe_allow_html = True)
+            st.subheader("Predicted Flight")
+            st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
+            fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
+            st.plotly_chart(fig)
+            st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
+            m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
+            loc = []
+            for r,rows in df.iterrows():
+                loc.append((rows['Latitude'], rows['Longitude']))
+            folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
+            folium_static(m)
+            x = "Download Files:"
+            exp = st.expander(x)
+            ChangeWidgetFontSize(x, '16px')
+            with exp:
+                l1, l2 = convertingToKML('Predicted', s, e, flight)
+                st.markdown(l1, unsafe_allow_html = True)
+                st.markdown(l2, unsafe_allow_html = True)
             for i in x:
                 for j in i[:-2]:
                     st.write(j)
@@ -373,7 +388,7 @@ if tk == 1:
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
                 st.subheader("Flight on {}".format(i))
                 st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
-                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
+                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
                 st.plotly_chart(fig)
                 st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
                 m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
@@ -384,7 +399,7 @@ if tk == 1:
                 folium_static(m)
                 x = "Download Files:"
                 exp = st.expander(x)
-                ChangeWidgetFontSize(x, '24px')
+                ChangeWidgetFontSize(x, '16px')
                 with exp:
                     l1, l2 = convertingToKML(i, s, e, flight)
                     st.markdown(l1, unsafe_allow_html = True)
