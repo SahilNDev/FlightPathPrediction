@@ -292,6 +292,7 @@ def main_function(airport1, airport2):
                 x = re.findall(r'a href="[/a-zA-Z0-9]+', str(i))[0][8:]
                 st.write(main_url+x+"/tracklog")
                 og = scraping_function(main_url+x+"/tracklog",elevation1,elevation2,flight,s,e)
+            table_body.pop(0)
             flight_links = []
             for i in table_body:
                 if airport1 in i.text and airport2 in i.text and 'Cancelled' not in i.text:
