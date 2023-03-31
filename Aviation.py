@@ -361,7 +361,7 @@ if tk == 1:
             loc = []
             for i,rows in df.iterrows():
                 loc.append((rows['Latitude'], rows['Longitude']))
-            folium.PolyLine(loc, color = 'red', weight=15, opacity = 0.8).add_to(m)
+            folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
             folium_static(m)
             l1, l2 = convertingToKML(i, s, e, flight)
             tab2.markdown(l1, unsafe_allow_html = True)
