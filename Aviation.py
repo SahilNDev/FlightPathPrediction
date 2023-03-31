@@ -358,7 +358,7 @@ if tk == 1:
         ChangeWidgetFontSize(listTabs[1], '24px')
         placeholder.empty()
         with tab1:
-            df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
+            df = pd.read_csv(r"Datasets/{}-Predicted.csv".format(flight))
             st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
             st.subheader("Predicted Flight")
             st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
@@ -386,7 +386,7 @@ if tk == 1:
         with tab2:
             st.markdown('<h1>Analysis:</h1>', unsafe_allow_html = True)
             for i in a_list:
-                df = pd.read_csv(r"Datasets/{}-Predicted.csv".format(flight))
+                df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
                 st.subheader("Flight on {}".format(i))
                 st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
