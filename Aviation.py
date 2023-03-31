@@ -276,7 +276,6 @@ def main_function(airport1, airport2):
         while True:
             flight = flights[0]
             ulo = main_url + "/live/flight/{}/history".format(flight)
-            st.write(ulo)
             url_extract = requests.get(ulo).text
             soup = BeautifulSoup(url_extract, 'lxml')
             new_table = soup.find('table', class_ = "prettyTable fullWidth tablesaw tablesaw-stack")
@@ -291,7 +290,6 @@ def main_function(airport1, airport2):
             og = ""
             if airport1 in table_body[0].text and airport2 in table_body[0].text and 'On The Way!' in table_body[0].text:
                 x = re.findall(r'a href="[/a-zA-Z0-9]+', str(table_body[0]))[0][8:]
-                st.write(main_url+x+"/tracklog")
                 og = scraping_function(main_url+x+"/tracklog",elevation1,elevation2,flight,s,e)
             table_body.pop(0)
             flight_links = []
@@ -371,7 +369,6 @@ if tk == 1:
         ChangeWidgetFontSize(listTabs[1], '24px')
         placeholder.empty()
         with tab1:
-            st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
             if og != "":
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
                 st.subheader("Ongoing Flight:")
