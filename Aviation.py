@@ -372,10 +372,10 @@ if tk == 1:
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
                 st.subheader("Flight on {}".format(i))
-                st.markdown("<h3>Trajectory:</h3>", unsafe_allow_html = True)
+                st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
                 st.plotly_chart(fig)
-                st.markdown("<h3>Path:</h3>", unsafe_allow_html = True)
+                st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
                 m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
                 loc = []
                 for r,rows in df.iterrows():
