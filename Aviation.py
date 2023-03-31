@@ -381,6 +381,7 @@ if tk == 1:
             for i in results:
                 for j in i[:-2]:
                     st.write(j)
+                    ChangeWidgetFontSize(j, '20px')
                 st.pyplot(i[-2])
                 st.pyplot(i[-1])
         with tab2:
