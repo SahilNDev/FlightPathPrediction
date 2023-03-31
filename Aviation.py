@@ -315,6 +315,16 @@ def add_bg_from_url():
          """,
          unsafe_allow_html=True
      )
+
+def ChangeWidgetFontSize(wgt_txt, wch_font_size = '12px'):
+    htmlstr = """<script>var elements = window.parent.document.querySelectorAll('p'), i;
+                for (i = 0; i < elements.length; ++i) 
+                    { if (elements[i].textContent.includes(|wgt_txt|)) 
+                        { elements[i].style.fontSize ='""" + wch_font_size + """'; } }</script>  """
+
+    htmlstr = htmlstr.replace('|wgt_txt|', "'" + wgt_txt + "'")
+    components.html(f"{htmlstr}", height=0, width=0)
+
 st.set_page_config(layout='wide', page_title="Bird's Eye", page_icon = "https://toppng.com/uploads/preview/transparent-background-airplane-11549404876oivb2vpwwf.png")
 add_bg_from_url()
 #st.write(datetime.now(pytz.timezone('Asia/Kolkata')))
@@ -341,7 +351,10 @@ if tk == 1:
         placeholder.text("Model Training in progress....")
         x = model_implementation(a_list, flight)
         placeholder.text("Model Training successful")
-        tab1, tab2 = st.tabs(["Prediction","Analysis"])
+        listTabs = ['Prediction','Analysis']
+        tab1, tab2 = st.tabs(listTabs)
+        ChangeWidgetFontSize(listTabs[0], '24px')
+        ChangeWidgetFontSize(listTabs[1], '24px')
         placeholder.empty()
         with tab1:
             st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
