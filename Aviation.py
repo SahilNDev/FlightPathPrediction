@@ -367,8 +367,7 @@ if tk == 1:
                     loc.append((rows['Latitude'], rows['Longitude']))
                 folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
                 folium_static(m)
-                exp = st.expander()
-                with exp:
+                with st.expander("Download Files:"):
                     l1, l2 = convertingToKML(i, s, e, flight)
                     st.markdown(l1, unsafe_allow_html = True)
                     st.markdown(l2, unsafe_allow_html = True)
