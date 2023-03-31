@@ -275,14 +275,12 @@ def main_function(airport1, airport2):
     try:
         while True:
             flight = flights[0]
-            st.write(flight)
             ulo = main_url + "/live/flight/{}/history".format(flight)
             st.write(ulo)
             url_extract = requests.get(ulo).text
             soup = BeautifulSoup(url_extract, 'lxml')
             new_table = soup.find('table', class_ = "prettyTable fullWidth tablesaw tablesaw-stack")
             table_body = new_table.find_all('tr')[1:]
-            st.write(table_body)
             while True:
                 if 'Scheduled' in table_body[0].text:
                     table_body.pop(0)
@@ -373,19 +371,22 @@ if tk == 1:
         ChangeWidgetFontSize(listTabs[1], '24px')
         placeholder.empty()
         with tab1:
-            df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
             st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
-            st.subheader("Predicted Flight")
-            st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
-            fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
-            st.plotly_chart(fig)
-            st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
-            m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
-            loc = []
-            for r,rows in df.iterrows():
-                loc.append((rows['Latitude'], rows['Longitude']))
-            folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
-            folium_static(m)
+            if og != "":
+                df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
+                st.subheader("Ongoing Flight:")
+                st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
+                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
+                st.plotly_chart(fig)
+                st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
+                m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
+                loc = []
+                for r,rows in df.iterrows():
+                    loc.append((rows['Latitude'], rows['Longitude']))
+                folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
+                folium_static(m)
+            else:
+               st.subheader("This flight is not ongoing, it is scheduled to start soon.")
             df = pd.read_csv(r"Datasets/{}-Predicted.csv".format(flight))
             st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
             st.subheader("Predicted Flight")
