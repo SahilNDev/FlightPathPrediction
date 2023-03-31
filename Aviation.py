@@ -357,7 +357,7 @@ if tk == 1:
             st.markdown('<h1>Analysis:</h1>', unsafe_allow_html = True)
             for i in a_list:
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
-                st.subheader("Flight on {}:".format(i))
+                st.subheader("Flight on {}".format(i))
                 st.markdown("<h3>Trajectory:</h3>", unsafe_allow_html = True)
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters", title = "Trajectory of the plane {} on {}".format(flight, i))
                 st.plotly_chart(fig)
@@ -368,7 +368,7 @@ if tk == 1:
                     loc.append((rows['Latitude'], rows['Longitude']))
                 folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
                 folium_static(m)
-                with st.expander("Download Files:"):
+                with st.expander("<h4>Download Files:</h4>", unsafe_allow_html = True):
                     l1, l2 = convertingToKML(i, s, e, flight)
                     st.markdown(l1, unsafe_allow_html = True)
                     st.markdown(l2, unsafe_allow_html = True)
