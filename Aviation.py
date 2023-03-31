@@ -350,7 +350,7 @@ if tk == 1:
         placeholder.empty()
         placeholder = st.empty()
         placeholder.text("Model Training in progress....")
-        x = model_implementation(a_list, flight)
+        results = model_implementation(a_list, flight)
         placeholder.text("Model Training successful")
         listTabs = ['Prediction','Analysis']
         tab1, tab2 = st.tabs(listTabs)
@@ -378,7 +378,7 @@ if tk == 1:
                 l1, l2 = convertingToKML('Predicted', s, e, flight)
                 st.markdown(l1, unsafe_allow_html = True)
                 st.markdown(l2, unsafe_allow_html = True)
-            for i in x:
+            for i in results:
                 for j in i[:-2]:
                     st.write(j)
                 st.pyplot(i[-2])
