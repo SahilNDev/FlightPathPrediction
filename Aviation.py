@@ -277,10 +277,16 @@ def main_function(airport1, airport2):
             new_table = soup.find('table', class_ = "prettyTable fullWidth tablesaw tablesaw-stack")
             table_body = new_table.find_all('tr')[1:]
             while True:
-                if 'Scheduled' in table_body[0].text or 'On The Way!' in table_body[0].text:
+                if 'Scheduled' in table_body[0].text:
                     table_body.pop(0)
                 else:
                     break
+            elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
+            elevation2 = airports[airports['iata_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
+            og = ""
+            if airport1 in table_body[0].text and airport2 in table_body[0].text and 'On The Way!' in table_body[0].text:
+		x = re.findall(r'a href="[/a-zA-Z0-9]+', str(i))[0][8:]
+                og = scraping_function(main_url+x+"/tracklog",elevation1,elevation2,flight,s,e)
             flight_links = []
             for i in table_body:
                 if airport1 in i.text and airport2 in i.text and 'Cancelled' not in i.text:
@@ -288,14 +294,12 @@ def main_function(airport1, airport2):
                     flight_links.append(x)
                     if len(flight_links) == 5:
                         break
-            elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
-            elevation2 = airports[airports['iata_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
             if len(flight_links) == 5:
                 fileslist = []
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
-                return fileslist, flight,s,e
+                return fileslist, flight,s,e, og
             else:
                 flights.remove(flight)
     except Exception as ex:
@@ -343,7 +347,7 @@ if tk == 1:
     y = df[df['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
     placeholder = st.empty()
     placeholder.text("Scraping is going on....")
-    a_list, flight,s,e = main_function(x, y)
+    a_list, flight,s,e,og = main_function(x, y)
     if type(a_list) is list:
         placeholder.text("Scraping has been done successfully")
         st.write("Flight in consideration is {}".format(flight))
@@ -358,6 +362,19 @@ if tk == 1:
         ChangeWidgetFontSize(listTabs[1], '24px')
         placeholder.empty()
         with tab1:
+            df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
+            st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
+            st.subheader("Predicted Flight")
+            st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
+            fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
+            st.plotly_chart(fig)
+            st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
+            m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
+            loc = []
+            for r,rows in df.iterrows():
+                loc.append((rows['Latitude'], rows['Longitude']))
+            folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
+            folium_static(m)
             df = pd.read_csv(r"Datasets/{}-Predicted.csv".format(flight))
             st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
             st.subheader("Predicted Flight")
