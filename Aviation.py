@@ -378,7 +378,7 @@ if tk == 1:
                 l1, l2 = convertingToKML('Predicted', s, e, flight)
                 st.markdown(l1, unsafe_allow_html = True)
                 st.markdown(l2, unsafe_allow_html = True)
-            for i in results.keys:
+            for i in results.keys():
                 st.subheader("Model for {}:".format(i))
                 for j in results[i][:-2]:
                     st.write(j)
