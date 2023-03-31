@@ -64,7 +64,7 @@ def model_implementation(files, flight):
         df['minute'] = df['date_time'].apply(lambda x: x.minute)
         df['second'] = df['date_time'].apply(lambda x: x.second)
     units = ['Latitude','Longitude','meters']
-    imp_array = []
+    units_dict = {}
     predicted_df = dataframelist[-1]
     for i in units:
         arr = []
@@ -128,9 +128,9 @@ def model_implementation(files, flight):
         plt.xlabel('Time step', size=15)
         plt.legend(fontsize=10)
         arr.append(fig1)
-        imp_array.append(arr)
+        units_dict[i] = arr
     predicted_df.to_csv(r"Datasets/{}-{}.csv".format(flight, 'Predicted'), index = False)
-    return imp_array
+    return units_dict
 	
 def convertingToKML(file,s,e, flight):
     f1 = open(r"Datasets/{}-{}.csv".format(flight, file), 'r', encoding = 'utf-8')
@@ -378,8 +378,9 @@ if tk == 1:
                 l1, l2 = convertingToKML('Predicted', s, e, flight)
                 st.markdown(l1, unsafe_allow_html = True)
                 st.markdown(l2, unsafe_allow_html = True)
-            for i in results:
-                for j in i[:-2]:
+            for i in results.keys:
+                st.subheader("Model for {}:".format(i))
+                for j in results[i][:-2]:
                     st.write(j)
                     ChangeWidgetFontSize(j, '20px')
                 st.pyplot(i[-2])
