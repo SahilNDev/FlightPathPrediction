@@ -276,7 +276,9 @@ def main_function(airport1, airport2):
         while True:
             flight = flights[0]
             st.write(flight)
-            url_extract = requests.get(main_url + "/live/flight/{}/history".format(flight)).text
+            ulo = main_url + "/live/flight/{}/history".format(flight)
+            st.write(ulo)
+            url_extract = requests.get(ulo).text
             soup = BeautifulSoup(url_extract, 'lxml')
             new_table = soup.find('table', class_ = "prettyTable fullWidth tablesaw tablesaw-stack")
             table_body = new_table.find_all('tr')[1:]
