@@ -284,6 +284,8 @@ def main_function(airport1, airport2):
             elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
             elevation2 = airports[airports['iata_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
             og = ""
+            for i in table_body:
+                st.write(i.text)
             if airport1 in table_body[0].text and airport2 in table_body[0].text and 'On The Way!' in table_body[0].text:
                 x = re.findall(r'a href="[/a-zA-Z0-9]+', str(i))[0][8:]
                 st.write(main_url+x+"/tracklog")
