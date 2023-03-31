@@ -304,6 +304,7 @@ def main_function(airport1, airport2):
             else:
                 flights.remove(flight)
     except Exception as ex:
+        st.write(ex)
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
         return "", "", "", "", ""
     
