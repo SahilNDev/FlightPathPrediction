@@ -216,27 +216,30 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     table_data.pop(0)
     data_csv = []
     for row in table_data:
-        columns = row.find_all('td')
-        column_data = []
-        for i in columns:
-            try:
-                tds = i.find('span').text
-            except Exception:
-                tds = i.text
-            column_data.append(tds)
-        if column_data[1] != '':
-            column_data[3] = column_data[3].split(' ')[1][:-1]
-            column_data[7] = column_data[7][:-1]
-            if column_data[4] == '':
-                column_data[4] = str(data_csv[-1][4])
-                column_data[5] = str(data_csv[-1][5])
-                column_data[6] = str(data_csv[-1][6])
-            for i in range(1, len(column_data)-1):
+        try:
+            columns = row.find_all('td')
+            column_data = []
+            for i in columns:
                 try:
-                    column_data[i] = float(column_data[i].replace(',', ''))
+                    tds = i.find('span').text
                 except Exception:
-                    column_data[i] = 0
-            data_csv.append(column_data)
+                    tds = i.text
+                column_data.append(tds)
+            if column_data[1] != '':
+                column_data[3] = column_data[3].split(' ')[1][:-1]
+                column_data[7] = column_data[7][:-1]
+                if column_data[4] == '':
+                    column_data[4] = str(data_csv[-1][4])
+                    column_data[5] = str(data_csv[-1][5])
+                    column_data[6] = str(data_csv[-1][6])
+                for i in range(1, len(column_data)-1):
+                    try:
+                        column_data[i] = float(column_data[i].replace(',', ''))
+                    except Exception:
+                        column_data[i] = 0
+                data_csv.append(column_data)
+        except Exception:
+            break
     header_csv.extend(['Time Diff', 'm/s', 'Dist from lp', 'tilt'])
     data_csv[0].extend([0,mph_to_mps(data_csv[0][5]), 0,0])
     df = pd.DataFrame(columns = header_csv)
