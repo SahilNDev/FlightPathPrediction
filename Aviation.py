@@ -275,7 +275,6 @@ def main_function(airport1, airport2):
     try:
         while True:
             flight = flights[0]
-            st.write(flight)
             ulo = main_url + "/live/flight/{}/history".format(flight)
             url_extract = requests.get(ulo).text
             soup = BeautifulSoup(url_extract, 'lxml')
@@ -309,7 +308,6 @@ def main_function(airport1, airport2):
             else:
                 flights.remove(flight)
     except Exception as ex:
-        st.write(ex)
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
         return "", "", "", "", ""
     
