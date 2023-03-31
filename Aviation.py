@@ -359,7 +359,7 @@ if tk == 1:
             tab2.plotly_chart(fig)
             m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=3,control_scale=True)
             loc = []
-            for i,rows in df.iterrows():
+            for r,rows in df.iterrows():
                 loc.append((rows['Latitude'], rows['Longitude']))
             folium.PolyLine(loc, color = 'red', weight=5, opacity = 0.8).add_to(m)
             folium_static(m)
