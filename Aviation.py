@@ -383,8 +383,8 @@ if tk == 1:
                 for j in results[i][:-2]:
                     st.write(j)
                     ChangeWidgetFontSize(j, '20px')
-                st.pyplot(i[-2])
-                st.pyplot(i[-1])
+                st.pyplot(results[i][-2])
+                st.pyplot(results[i][-1])
         with tab2:
             st.markdown('<h1>Analysis:</h1>', unsafe_allow_html = True)
             for i in a_list:
