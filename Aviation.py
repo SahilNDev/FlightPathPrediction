@@ -260,7 +260,7 @@ def main_function(airport1, airport2):
     s = airports[airports['gps_code'] == airport1].reset_index(drop = True)['municipality'][0]
     e = airports[airports['iata_code'] == airport2].reset_index(drop = True)['municipality'][0]
     soup = BeautifulSoup(url_extract, 'lxml')
-    tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
+    tables = soup.find_all('div', class_ ="airportBoardContainer")[1]
     trs = []
     for i in tables:
         trs.extend(i.find_all('tr'))
