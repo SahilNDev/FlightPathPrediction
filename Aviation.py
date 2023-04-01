@@ -42,30 +42,34 @@ def create_dataset(dataset, look_back, look_ahead):
         X.append(a)
         Y.append(dataset[i + look_back + look_ahead - 1, 0])
     return np.array(X), np.array(Y)
-def model_implementation(files, flight):
+
+def df_creation(flight, file):
+    df = pd.read_csv(r'Datasets/{}-{}.csv'.format(flight, file))
+    #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
+    daylist = np.array(df['Time (EDT)'])
+    strday = daylist[0][:3]
+    df['date_time'] = np.nan
+    for j in range(df.shape[0]):
+        day2 = daylist[j][:3]
+        if(strday==day2):
+            df['date_time'][j] = i + daylist[j][3:]
+        else:
+            if(int(i[:2])!=31):
+                df['date_time'][j] = str(int(i[:2]) + 1) + i[2:] + daylist[j][3:]
+            else:
+                df['date_time'][j] = "01-" + "0" + str(int(i[4])+1) + i[5:] + daylist[j][3:]
+    df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
+    df['day'] = df['date_time'].apply(lambda x: x.day)
+    df['hour'] = df['date_time'].apply(lambda x: x.hour)
+    df['minute'] = df['date_time'].apply(lambda x: x.minute)
+    df['second'] = df['date_time'].apply(lambda x: x.second)
+    return df
+
+def model_implementation(files, flight, og):
     dataframelist = []
     for i in files:
-        df_new = pd.read_csv(r'Datasets/{}-{}.csv'.format(flight, i))
-        #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
-        daylist = np.array(df_new['Time (EDT)'])
-        strday = daylist[0][:3]
-        df_new['date_time'] = np.nan
-        for j in range(df_new.shape[0]):
-            day2 = daylist[j][:3]
-            if(strday==day2):
-                df_new['date_time'][j] = i + daylist[j][3:]
-            else:
-                if(int(i[:2])!=31):
-                    df_new['date_time'][j] = str(int(i[:2]) + 1) + i[2:] + daylist[j][3:]
-                else:
-                    df_new['date_time'][j] = "01-" + "0" + str(int(i[4])+1) + i[5:] + daylist[j][3:]
-        dataframelist.append(df_new)
-    for df in dataframelist:
-        df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
-        df['day'] = df['date_time'].apply(lambda x: x.day)
-        df['hour'] = df['date_time'].apply(lambda x: x.hour)
-        df['minute'] = df['date_time'].apply(lambda x: x.minute)
-        df['second'] = df['date_time'].apply(lambda x: x.second)
+        dataframelist.append(df_creation(flight, i))
+    og_df = df_creation(flight, og)
     units = ['Latitude','Longitude','meters']
     units_dict = {}
     predicted_df = dataframelist[-1]
@@ -76,9 +80,13 @@ def model_implementation(files, flight):
         for df in dataframelist[1:]:
             df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
             df_update = pd.concat([df_update, df_lat], axis=0)
+        og_lat=og_df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
         dataset = np.reshape(dataset, (-1, 1))
+        og_dataset =og_lat[i].values #numpy.ndarray
+        og_dataset = og_dataset.astype('float32')
+        og_dataset = np.reshape(og_dataset, (-1, 1))
         scaler = MinMaxScaler(feature_range=(0, 1))
         dataset = scaler.fit_transform(dataset)
         test_size = dataframelist[-1].shape[0]
@@ -132,6 +140,7 @@ def model_implementation(files, flight):
         plt.legend(fontsize=10)
         arr.append(fig1)
         units_dict[i] = arr
+        
     predicted_df.to_csv(r"Datasets/{}-{}.csv".format(flight, 'Predicted'), index = False)
     return units_dict
 	
@@ -290,7 +299,7 @@ def main_function(airport1, airport2):
                     break
             elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
             elevation2 = airports[airports['iata_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
-            og = ""
+            og = None
             if airport1 in table_body[0].text and airport2 in table_body[0].text and 'On The Way!' in table_body[0].text:
                 x = re.findall(r'a href="[/a-zA-Z0-9]+', str(table_body[0]))[0][8:]
                 og = scraping_function(main_url+x+"/tracklog",elevation1,elevation2,flight,s,e)
@@ -362,7 +371,7 @@ if tk == 1:
         placeholder.empty()
         placeholder = st.empty()
         placeholder.text("Model Training in progress....")
-        results = model_implementation(a_list, flight)
+        results = model_implementation(a_list, flight, og)
         placeholder.text("Model Training successful")
         listTabs = ['Prediction','Ongoing Flight','Analysis']
         tab1, tab2, tab3 = st.tabs(listTabs)
@@ -400,7 +409,7 @@ if tk == 1:
                 st.pyplot(results[i][-1])
         with tab2:
             st.markdown("<h1>Ongoing Flight:</h1>", unsafe_allow_html=True)
-            if og != "":
+            if og != None:
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
 #                 daylist = np.array(df['Time (EDT)'])
 #                 strday = daylist[0][:3]
