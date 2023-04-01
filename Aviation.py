@@ -408,12 +408,12 @@ if tk == 1:
                 for j in range(df.shape[0]):
                     day2 = daylist[j][:3]
                     if(strday==day2):
-                        df['date_time'][j] = i + daylist[j][3:]
+                        df['date_time'][j] = og + daylist[j][3:]
                     else:
-                        if(int(i[:2])!=31):
-                            df['date_time'][j] = str(int(i[:2]) + 1) + i[2:] + daylist[j][3:]
+                        if(int(og[:2])!=31):
+                            df['date_time'][j] = str(int(og[:2]) + 1) + og[2:] + daylist[j][3:]
                         else:
-                            df['date_time'][j] = "01-" + "0" + str(int(i[4])+1) + i[5:] + daylist[j][3:]
+                            df['date_time'][j] = "01-" + "0" + str(int(og[4])+1) + og[5:] + daylist[j][3:]
                 df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
                 df['day'] = df['date_time'].apply(lambda x: x.day)
                 df['hour'] = df['date_time'].apply(lambda x: x.hour)
