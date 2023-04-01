@@ -402,42 +402,42 @@ if tk == 1:
             st.markdown("<h1>Ongoing Flight:</h1>", unsafe_allow_html=True)
             if og != "":
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
-                '''daylist = np.array(df['Time (EDT)'])
-                strday = daylist[0][:3]
-                df['date_time'] = np.nan
-                for j in range(df.shape[0]):
-                    day2 = daylist[j][:3]
-                    if(strday==day2):
-                        df['date_time'][j] = og + daylist[j][3:]
-                    else:
-                        if(int(og[:2])!=31):
-                            df['date_time'][j] = str(int(og[:2]) + 1) + og[2:] + daylist[j][3:]
-                        else:
-                            df['date_time'][j] = "01-" + "0" + str(int(og[4])+1) + og[5:] + daylist[j][3:]
-                df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
-                df['day'] = df['date_time'].apply(lambda x: x.day)
-                df['hour'] = df['date_time'].apply(lambda x: x.hour)
-                df['minute'] = df['date_time'].apply(lambda x: x.minute)
-                df['second'] = df['date_time'].apply(lambda x: x.second)
-                st.markdown("<h4>Predictions for Future Trajectory:</h4>", unsafe_allow_html = True)
-                arr = []
-                units = ['Latitude','Longitude','meters']
-                for i in units:
-                    df_update = df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
-                    dataset = df_update[i].values #numpy.ndarray
-                    dataset = dataset.astype('float32')
-                    dataset = np.reshape(dataset, (-1, 1))
-                    dataset = scaler.transform(dataset)
-                    X_test = dataset[-5:, 0]
-                    # reshape input to be [samples, time steps, features]
-                    X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
-                    test_predict = model.predict(X_test)
-                    # invert predictions
-                    test_predict = scaler.inverse_transform(test_predict)
-                    arr.append(test_predict[0,0])
-                st.write("Next Latitude in degrees: {}".format(arr[0]))
-                st.write("Next Longitude in degrees: {}".format(arr[1]))
-                st.write("Next Altitude in meters: {}".format(arr[2]))'''
+#                 daylist = np.array(df['Time (EDT)'])
+#                 strday = daylist[0][:3]
+#                 df['date_time'] = np.nan
+#                 for j in range(df.shape[0]):
+#                     day2 = daylist[j][:3]
+#                     if(strday==day2):
+#                         df['date_time'][j] = og + daylist[j][3:]
+#                     else:
+#                         if(int(og[:2])!=31):
+#                             df['date_time'][j] = str(int(og[:2]) + 1) + og[2:] + daylist[j][3:]
+#                         else:
+#                             df['date_time'][j] = "01-" + "0" + str(int(og[4])+1) + og[5:] + daylist[j][3:]
+#                 df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
+#                 df['day'] = df['date_time'].apply(lambda x: x.day)
+#                 df['hour'] = df['date_time'].apply(lambda x: x.hour)
+#                 df['minute'] = df['date_time'].apply(lambda x: x.minute)
+#                 df['second'] = df['date_time'].apply(lambda x: x.second)
+#                 st.markdown("<h4>Predictions for Future Trajectory:</h4>", unsafe_allow_html = True)
+#                 arr = []
+#                 units = ['Latitude','Longitude','meters']
+#                 for i in units:
+#                     df_update = df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
+#                     dataset = df_update[i].values #numpy.ndarray
+#                     dataset = dataset.astype('float32')
+#                     dataset = np.reshape(dataset, (-1, 1))
+#                     dataset = scaler.transform(dataset)
+#                     X_test = dataset[-5:, 0]
+#                     # reshape input to be [samples, time steps, features]
+#                     X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
+#                     test_predict = model.predict(X_test)
+#                     # invert predictions
+#                     test_predict = scaler.inverse_transform(test_predict)
+#                     arr.append(test_predict[0,0])
+#                 st.write("Next Latitude in degrees: {}".format(arr[0]))
+#                 st.write("Next Longitude in degrees: {}".format(arr[1]))
+#                 st.write("Next Altitude in meters: {}".format(arr[2]))
                 st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
                 st.plotly_chart(fig)
