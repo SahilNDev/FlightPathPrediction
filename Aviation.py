@@ -408,16 +408,13 @@ if tk == 1:
                     dataset = dataset.astype('float32')
                     dataset = np.reshape(dataset, (-1, 1))
                     dataset = scaler.transform(dataset)
-                    look_back = 5
-                    look_ahead = 1
-                    X_test, Y_test = create_dataset(dataset, look_back, look_ahead)
+                    X_test = dataset[-5:, 0]
                     # reshape input to be [samples, time steps, features]
                     X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
                     test_predict = model.predict(X_test)
                     # invert predictions
                     test_predict = scaler.inverse_transform(test_predict)
-                    Y_test = scaler.inverse_transform([Y_test])
-		    arr.append(test_predict[:,-1])
+		    arr.append(test_predict[0,0])
                 st.write("Next Latitude in degrees: {}".format(arr[0]))
 		st.write("Next Longitude in degrees: {}".format(arr[1]))
 		st.write("Next Altitude in meters: {}".format(arr[2]))
