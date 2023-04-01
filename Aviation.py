@@ -138,16 +138,16 @@ def model_implementation(files, flight, og):
         plt.legend(fontsize=10)
         arr.append(fig1)
         units_dict[i] = arr
-        if og != None:
-            og_lat=og_df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
-            og_dataset =og_lat[i].values #numpy.ndarray
-            og_dataset = og_dataset.astype('float32')
-            og_dataset = np.reshape(og_dataset, (-1, 1))
-            og_test = scaler.transform(og_dataset)
-            og_test = np.reshape(og_test, (og_test.shape[0], 1, og_test.shape[1]))
-            og_predict = model.predict(og_test)
-            og_predict = scaler.inverse_transform(og_predict)
-            og_p.append("The next {} is: {}".format(i, og_predict[-1,0]))
+#         if og != None:
+#             og_lat=og_df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
+#             og_dataset =og_lat[i].values #numpy.ndarray
+#             og_dataset = og_dataset.astype('float32')
+#             og_dataset = np.reshape(og_dataset, (-1, 1))
+#             og_test = scaler.transform(og_dataset)
+#             og_test = np.reshape(og_test, (og_test.shape[0], 1, og_test.shape[1]))
+#             og_predict = model.predict(og_test)
+#             og_predict = scaler.inverse_transform(og_predict)
+#             og_p.append("The next {} is: {}".format(i, og_predict[-1,0]))
     predicted_df.to_csv(r"Datasets/{}-{}.csv".format(flight, 'Predicted'), index = False)
     return units_dict, og_p
 	
