@@ -69,10 +69,12 @@ def model_implementation(files, flight, og):
     dataframelist = []
     for i in files:
         dataframelist.append(df_creation(flight, i))
-    og_df = df_creation(flight, og)
+    if og != None:
+        og_df = df_creation(flight, og)
     units = ['Latitude','Longitude','meters']
     units_dict = {}
     predicted_df = dataframelist[-1]
+    og_p = []
     for i in units:
         arr = []
         pr = dataframelist[-1][i][:6]
@@ -80,13 +82,9 @@ def model_implementation(files, flight, og):
         for df in dataframelist[1:]:
             df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
             df_update = pd.concat([df_update, df_lat], axis=0)
-        og_lat=og_df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
         dataset = df_update[i].values #numpy.ndarray
         dataset = dataset.astype('float32')
         dataset = np.reshape(dataset, (-1, 1))
-        og_dataset =og_lat[i].values #numpy.ndarray
-        og_dataset = og_dataset.astype('float32')
-        og_dataset = np.reshape(og_dataset, (-1, 1))
         scaler = MinMaxScaler(feature_range=(0, 1))
         dataset = scaler.fit_transform(dataset)
         test_size = dataframelist[-1].shape[0]
@@ -140,9 +138,18 @@ def model_implementation(files, flight, og):
         plt.legend(fontsize=10)
         arr.append(fig1)
         units_dict[i] = arr
-        
+        if og != None:
+            og_lat=og_df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
+            og_dataset =og_lat[i].values #numpy.ndarray
+            og_dataset = og_dataset.astype('float32')
+            og_dataset = np.reshape(og_dataset, (-1, 1))
+            og_dataset = scaler.transform(og_dataset)
+            og_test = og_dataset[-5:]
+            og_predict = model.predict(og_test)
+            og_predict = scaler.inverse_transform(og_predict)
+            og_p.append("The next {} is: {}".format(i, og_predict[0,0]))
     predicted_df.to_csv(r"Datasets/{}-{}.csv".format(flight, 'Predicted'), index = False)
-    return units_dict
+    return units_dict, og_p
 	
 def convertingToKML(file,s,e, flight):
     f1 = open(r"Datasets/{}-{}.csv".format(flight, file), 'r', encoding = 'utf-8')
@@ -371,7 +378,7 @@ if tk == 1:
         placeholder.empty()
         placeholder = st.empty()
         placeholder.text("Model Training in progress....")
-        results = model_implementation(a_list, flight, og)
+        results, og_p = model_implementation(a_list, flight, og)
         placeholder.text("Model Training successful")
         listTabs = ['Prediction','Ongoing Flight','Analysis']
         tab1, tab2, tab3 = st.tabs(listTabs)
@@ -411,42 +418,8 @@ if tk == 1:
             st.markdown("<h1>Ongoing Flight:</h1>", unsafe_allow_html=True)
             if og != None:
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
-#                 daylist = np.array(df['Time (EDT)'])
-#                 strday = daylist[0][:3]
-#                 df['date_time'] = np.nan
-#                 for j in range(df.shape[0]):
-#                     day2 = daylist[j][:3]
-#                     if(strday==day2):
-#                         df['date_time'][j] = og + daylist[j][3:]
-#                     else:
-#                         if(int(og[:2])!=31):
-#                             df['date_time'][j] = str(int(og[:2]) + 1) + og[2:] + daylist[j][3:]
-#                         else:
-#                             df['date_time'][j] = "01-" + "0" + str(int(og[4])+1) + og[5:] + daylist[j][3:]
-#                 df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
-#                 df['day'] = df['date_time'].apply(lambda x: x.day)
-#                 df['hour'] = df['date_time'].apply(lambda x: x.hour)
-#                 df['minute'] = df['date_time'].apply(lambda x: x.minute)
-#                 df['second'] = df['date_time'].apply(lambda x: x.second)
-#                 st.markdown("<h4>Predictions for Future Trajectory:</h4>", unsafe_allow_html = True)
-#                 arr = []
-#                 units = ['Latitude','Longitude','meters']
-#                 for i in units:
-#                     df_update = df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
-#                     dataset = df_update[i].values #numpy.ndarray
-#                     dataset = dataset.astype('float32')
-#                     dataset = np.reshape(dataset, (-1, 1))
-#                     dataset = scaler.transform(dataset)
-#                     X_test = dataset[-5:, 0]
-#                     # reshape input to be [samples, time steps, features]
-#                     X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
-#                     test_predict = model.predict(X_test)
-#                     # invert predictions
-#                     test_predict = scaler.inverse_transform(test_predict)
-#                     arr.append(test_predict[0,0])
-#                 st.write("Next Latitude in degrees: {}".format(arr[0]))
-#                 st.write("Next Longitude in degrees: {}".format(arr[1]))
-#                 st.write("Next Altitude in meters: {}".format(arr[2]))
+                for p in og_p:
+                    tab2.write(p)
                 st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
                 st.plotly_chart(fig)
