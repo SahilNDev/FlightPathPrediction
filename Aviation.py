@@ -399,9 +399,9 @@ if tk == 1:
             st.markdown("<h1>Ongoing Flight:</h1>", unsafe_allow_html=True)
             if og != "":
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
-		st.markdown("<h4>Predictions for Future Trajectory:</h4>", unsafe_allow_html = True)
-		arr = []
-		units = ['Latitude','Longitude','meters']
+                st.markdown("<h4>Predictions for Future Trajectory:</h4>", unsafe_allow_html = True)
+                arr = []
+                units = ['Latitude','Longitude','meters']
 		for i in units:
 		    df_update = df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
                     dataset = df_update[i].values #numpy.ndarray
