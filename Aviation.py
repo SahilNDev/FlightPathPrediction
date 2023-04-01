@@ -54,7 +54,7 @@ def df_creation(flight, file):
         if(strday==day2):
             df['date_time'][j] = file + daylist[j][3:]
         else:
-            if(int(i[:2])!=31):
+            if(int(file[:2])!=31):
                 df['date_time'][j] = str(int(file[:2]) + 1) + file[2:] + daylist[j][3:]
             else:
                 df['date_time'][j] = "01-0" + str(int(file[4])+1) + file[5:] + daylist[j][3:]
