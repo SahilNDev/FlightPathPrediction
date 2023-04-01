@@ -403,7 +403,7 @@ if tk == 1:
                 arr = []
                 units = ['Latitude','Longitude','meters']
                 for i in units:
-		    df_update = df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
+                    df_update = df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
                     dataset = df_update[i].values #numpy.ndarray
                     dataset = dataset.astype('float32')
                     dataset = np.reshape(dataset, (-1, 1))
