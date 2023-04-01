@@ -143,7 +143,7 @@ def model_implementation(files, flight, og):
             og_dataset =og_lat[i].values #numpy.ndarray
             og_dataset = og_dataset.astype('float32')
             og_dataset = np.reshape(og_dataset, (-1, 1))
-            og_dataset = scaler.transform(og_dataset)
+            og_test = scaler.transform(og_dataset)
             og_test = np.reshape(og_test, (og_test.shape[0], 1, og_test.shape[1]))
             og_predict = model.predict(og_test)
             og_predict = scaler.inverse_transform(og_predict)
