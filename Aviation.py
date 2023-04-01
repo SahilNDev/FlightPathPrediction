@@ -402,7 +402,7 @@ if tk == 1:
             st.markdown("<h1>Ongoing Flight:</h1>", unsafe_allow_html=True)
             if og != "":
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
-                daylist = np.array(df['Time (EDT)'])
+                '''daylist = np.array(df['Time (EDT)'])
                 strday = daylist[0][:3]
                 df['date_time'] = np.nan
                 for j in range(df.shape[0]):
@@ -437,7 +437,7 @@ if tk == 1:
                     arr.append(test_predict[0,0])
                 st.write("Next Latitude in degrees: {}".format(arr[0]))
                 st.write("Next Longitude in degrees: {}".format(arr[1]))
-                st.write("Next Altitude in meters: {}".format(arr[2]))
+                st.write("Next Altitude in meters: {}".format(arr[2]))'''
                 st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
                 st.plotly_chart(fig)
