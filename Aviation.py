@@ -402,6 +402,23 @@ if tk == 1:
             st.markdown("<h1>Ongoing Flight:</h1>", unsafe_allow_html=True)
             if og != "":
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
+                daylist = np.array(df['Time (EDT)'])
+                strday = daylist[0][:3]
+                df['date_time'] = np.nan
+                for j in range(df.shape[0]):
+                    day2 = daylist[j][:3]
+                        if(strday==day2):
+                            df['date_time'][j] = i + daylist[j][3:]
+                        else:
+                            if(int(i[:2])!=31):
+                                df['date_time'][j] = str(int(i[:2]) + 1) + i[2:] + daylist[j][3:]
+                            else:
+                                df['date_time'][j] = "01-" + "0" + str(int(i[4])+1) + i[5:] + daylist[j][3:]
+                df['date_time'] = pd.to_datetime(df['date_time'], format='%d-%m-%Y %H:%M:%S')
+                df['day'] = df['date_time'].apply(lambda x: x.day)
+                df['hour'] = df['date_time'].apply(lambda x: x.hour)
+                df['minute'] = df['date_time'].apply(lambda x: x.minute)
+                df['second'] = df['date_time'].apply(lambda x: x.second)
                 st.markdown("<h4>Predictions for Future Trajectory:</h4>", unsafe_allow_html = True)
                 arr = []
                 units = ['Latitude','Longitude','meters']
