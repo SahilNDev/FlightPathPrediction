@@ -414,7 +414,7 @@ if tk == 1:
                     test_predict = model.predict(X_test)
                     # invert predictions
                     test_predict = scaler.inverse_transform(test_predict)
-		    arr.append(test_predict[0,0])
+                    arr.append(test_predict[0,0])
                 st.write("Next Latitude in degrees: {}".format(arr[0]))
 		st.write("Next Longitude in degrees: {}".format(arr[1]))
 		st.write("Next Altitude in meters: {}".format(arr[2]))
