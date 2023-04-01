@@ -68,7 +68,7 @@ def model_implementation(files, flight):
     predicted_df = dataframelist[-1]
     for i in units:
         arr = []
-        pr = dataframelist[-1][i][:6]
+        pr = dataframelist[-1][i][:5]
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
         for df in dataframelist[1:]:
             df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
@@ -399,6 +399,28 @@ if tk == 1:
             st.markdown("<h1>Ongoing Flight:</h1>", unsafe_allow_html=True)
             if og != "":
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
+		st.markdown("<h4>Predictions for Future Trajectory:</h4>", unsafe_allow_html = True)
+		arr = []
+		units = ['Latitude','Longitude','meters']
+		for i in units:
+		    df_update = df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
+                    dataset = df_update[i].values #numpy.ndarray
+                    dataset = dataset.astype('float32')
+                    dataset = np.reshape(dataset, (-1, 1))
+                    dataset = scaler.transform(dataset)
+                    look_back = 5
+                    look_ahead = 1
+                    X_test, Y_test = create_dataset(dataset, look_back, look_ahead)
+                    # reshape input to be [samples, time steps, features]
+                    X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
+                    test_predict = model.predict(X_test)
+                    # invert predictions
+                    test_predict = scaler.inverse_transform(test_predict)
+                    Y_test = scaler.inverse_transform([Y_test])
+		    arr.append(test_predict[:,-1])
+                st.write("Next Latitude in degrees: {}".format(arr[0]))
+		st.write("Next Longitude in degrees: {}".format(arr[1]))
+		st.write("Next Altitude in meters: {}".format(arr[2]))
                 st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
                 fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
                 st.plotly_chart(fig)
