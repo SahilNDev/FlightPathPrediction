@@ -71,7 +71,7 @@ def model_implementation(files, flight):
     predicted_df = dataframelist[-1]
     for i in units:
         arr = []
-        pr = dataframelist[-1][i][:5]
+        pr = dataframelist[-1][i][:6]
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
         for df in dataframelist[1:]:
             df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
