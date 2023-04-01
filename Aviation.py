@@ -55,7 +55,7 @@ def model_implementation(files, flight):
             if(strday==day2):
                 df_new['date_time'][j] = i + daylist[j][3:]
             else:
-		if(int(i[:2])!=31):
+                if(int(i[:2])!=31):
                     df_new['date_time'][j] = str(int(i[:2]) + 1) + i[2:] + daylist[j][3:]
                 else:
                     df_new['date_time'][j] = "01-" + "0" + str(int(i[4])+1) + i[5:] + daylist[j][3:]
