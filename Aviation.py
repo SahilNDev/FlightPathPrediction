@@ -65,7 +65,7 @@ def df_creation(flight, file):
     df['second'] = df['date_time'].apply(lambda x: x.second)
     return df
 
-def model_implementation(files, flight, og):
+def model_implementation(files, flight, og, look_back, look_ahead):
     dataframelist = []
     for i in files:
         dataframelist.append(df_creation(flight, i))
@@ -90,8 +90,6 @@ def model_implementation(files, flight, og):
         test_size = dataframelist[-1].shape[0]
         train_size = len(dataset) - test_size
         train, test = dataset[:train_size,:], dataset[train_size:,:]
-        look_back = 5
-        look_ahead = 1
         X_train, Y_train = create_dataset(train, look_back, look_ahead)
         X_test, Y_test = create_dataset(test, look_back, look_ahead)
         # reshape input to be [samples, time steps, features]
@@ -362,8 +360,10 @@ st.title("Predict Flight Path Between Two Locations :airplane:")
 col1, col2 = st.columns(2)
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
+    look_behind = st.slider('Look Behind',5,20, help = "It is the number of values to look behind for making the next prediction.")
 with col2:
     destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
+    look_ahead = st.slider("Look Ahead",1,10, help = "It is the number of the next predicted value.")
     if st.button('Submit'):
         tk = 1
 if tk == 1:
@@ -378,7 +378,7 @@ if tk == 1:
         placeholder.empty()
         placeholder = st.empty()
         placeholder.text("Model Training in progress....")
-        results, og_p = model_implementation(a_list, flight, og)
+        results, og_p = model_implementation(a_list, flight, og, look_behind, look_ahead)
         placeholder.text("Model Training successful")
         listTabs = ['Prediction','Ongoing Flight','Analysis']
         tab1, tab2, tab3 = st.tabs(listTabs)
