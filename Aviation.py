@@ -360,10 +360,10 @@ st.title("Predict Flight Path Between Two Locations :airplane:")
 col1, col2 = st.columns(2)
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
-    look_behind = st.slider('Look Behind',5,20, help = "It is the number of values to look behind for making the next prediction.")
+    look_behind = st.slider('Look Behind',5,20, help = "It is the past n data points used for making the next prediction.")
 with col2:
     destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
-    look_ahead = st.slider("Look Ahead",1,10, help = "It is the number of the next predicted value.")
+    look_ahead = st.slider("Look Ahead",1,10, help = "It is the nth future point being predicted.")
     if st.button('Submit'):
         tk = 1
 if tk == 1:
