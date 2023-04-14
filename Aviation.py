@@ -77,7 +77,7 @@ def model_implementation(files, flight, og, look_back, look_ahead):
     og_p = []
     for i in units:
         arr = []
-        pr = dataframelist[-1][i][:(look_back+look_ahead-1)]
+        pr = dataframelist[-1][i][:(look_back)]
         df_update = dataframelist[0].loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
         for df in dataframelist[1:]:
             df_lat=df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
