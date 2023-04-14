@@ -37,7 +37,7 @@ def get_download_link(file, x, type):
     return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
 def create_dataset(dataset, look_back, look_ahead):
     X, Y = [], []
-    for i in range(len(dataset)-look_back-look_ahead):
+    for i in range(len(dataset)-look_back-look_ahead+1):
         a = dataset[i:(i+look_back), 0]
         X.append(a)
         Y.append(dataset[i + look_back + look_ahead - 1, 0])
