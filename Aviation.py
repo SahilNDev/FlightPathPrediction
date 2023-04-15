@@ -231,7 +231,7 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
             texts = column.text
         header_csv.append(texts)
     for i in range(len(header_csv)):
-        if header_csv[i] = 'meters':
+        if header_csv[i] == 'meters':
             header_csv[i] = 'Altitude(m)'
     table_data = table.find_all('tr')
     table_data.pop(0)
