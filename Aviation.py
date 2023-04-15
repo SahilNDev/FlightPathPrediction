@@ -71,7 +71,7 @@ def model_implementation(files, flight, og, look_back, look_ahead):
         dataframelist.append(df_creation(flight, i))
     if og != None:
         og_df = df_creation(flight, og)
-    units = ['Latitude','Longitude','meters']
+    units = ['Latitude','Longitude','Altitude(m)']
     units_dict = {}
     predicted_df = dataframelist[-1]
     og_p = []
@@ -145,7 +145,6 @@ def model_implementation(files, flight, og, look_back, look_ahead):
              og_test = []
              og_test.append(og_dataset[-look_back:, 0])
              og_test = np.array(og_test)
-             st.write(og_test.shape)
              og_test = np.reshape(og_test, (og_test.shape[0], 1, og_test.shape[1]))
              og_predict = model.predict(og_test)
              og_predict = scaler.inverse_transform(og_predict)
@@ -231,6 +230,7 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
         except Exception:
             texts = column.text
         header_csv.append(texts)
+    header_csv[6] = 'Altitude(m)'
     table_data = table.find_all('tr')
     table_data.pop(0)
     table_data.pop(0)
@@ -395,7 +395,7 @@ if tk == 1:
             st.markdown('<h1>Prediction:</h1>', unsafe_allow_html = True)
             st.subheader("Predicted Flight")
             st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
-            fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
+            fig = px.line_3d(df, x="Longitude", y = "Latitude", z="Altitude(m)")
             st.plotly_chart(fig)
             st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
             m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
@@ -425,7 +425,7 @@ if tk == 1:
                 for p in og_p:
                     tab2.write(p)
                 st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
-                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
+                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="Altitude(m)")
                 st.plotly_chart(fig)
                 st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
                 m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
