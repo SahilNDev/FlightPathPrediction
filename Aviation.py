@@ -281,7 +281,7 @@ def main_function(airport1, airport2):
     s = airports[airports['gps_code'] == airport1].reset_index(drop = True)['municipality'][0]
     e = airports[airports['iata_code'] == airport2].reset_index(drop = True)['municipality'][0]
     soup = BeautifulSoup(url_extract, 'lxml')
-    tables = soup.find_all('div', class_ ="airportBoardContainer")[1]
+    tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
     trs = []
     for i in tables:
         trs.extend(i.find_all('tr'))
@@ -297,7 +297,7 @@ def main_function(airport1, airport2):
             url_extract = requests.get(ulo).text
             soup = BeautifulSoup(url_extract, 'lxml')
             new_table = soup.find('table', class_ = "prettyTable fullWidth tablesaw tablesaw-stack")
-            table_body = new_table.find_all('tr')[1::2]
+            table_body = new_table.find_all('tr')[1:]
             st.write(table_body)
             while True:
                 if 'Scheduled' in table_body[0].text:
