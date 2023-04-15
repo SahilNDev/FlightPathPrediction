@@ -298,19 +298,16 @@ def main_function(airport1, airport2):
             soup = BeautifulSoup(url_extract, 'lxml')
             new_table = soup.find('table', class_ = "prettyTable fullWidth tablesaw tablesaw-stack")
             table_body = new_table.find_all('tr')[1:]
-            st.write(table_body)
             while True:
                 if 'Scheduled' in table_body[0].text:
                     table_body.pop(0)
                 else:
                     break
-            st.write(table_body[0].text)
             elevation1 = airports[airports['gps_code'] == airport1].reset_index(drop=True)['elevation_ft'][0]*0.3048
             elevation2 = airports[airports['iata_code'] == airport2].reset_index(drop=True)['elevation_ft'][0]*0.3048
             og = None
             if airport1 in table_body[0].text and airport2 in table_body[0].text and 'On The Way!' in table_body[0].text:
                 x = re.findall(r'a href="[/a-zA-Z0-9]+', str(table_body[0]))[0][8:]
-                st.write(x)
                 og = scraping_function(main_url+x+"/tracklog",elevation1,elevation2,flight,s,e)
             table_body.pop(0)
             flight_links = []
