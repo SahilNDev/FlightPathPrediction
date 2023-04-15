@@ -444,7 +444,7 @@ if tk == 1:
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight, i))
                 st.subheader("Flight on {}".format(i))
                 st.markdown("<h4>Trajectory:</h4>", unsafe_allow_html = True)
-                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="meters")
+                fig = px.line_3d(df, x="Longitude", y = "Latitude", z="Altitude(m)")
                 st.plotly_chart(fig)
                 st.markdown("<h4>Path:</h4>", unsafe_allow_html = True)
                 m = folium.Map(location=[df.Latitude.mean(), df.Longitude.mean()],zoom_start=5,control_scale=True)
