@@ -230,7 +230,9 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
         except Exception:
             texts = column.text
         header_csv.append(texts)
-    header_csv[6] = 'Altitude(m)'
+    for i in range(len(header_csv)):
+        if header_csv[i] = 'meters':
+            header_csv[i] = 'Altitude(m)'
     table_data = table.find_all('tr')
     table_data.pop(0)
     table_data.pop(0)
