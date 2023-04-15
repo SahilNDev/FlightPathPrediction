@@ -149,7 +149,7 @@ def model_implementation(files, flight, og, look_back, look_ahead):
              og_test = np.reshape(og_test, (og_test.shape[0], 1, og_test.shape[1]))
              og_predict = model.predict(og_test)
              og_predict = scaler.inverse_transform(og_predict)
-             og_p.append("The next {} is: {}".format(i, og_predict))
+             og_p.append("The next {} is: {}".format(i, og_predict[0,0]))
     predicted_df.to_csv(r"Datasets/{}-{}.csv".format(flight, 'Predicted'), index = False)
     return units_dict, og_p
 	
