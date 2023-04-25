@@ -340,7 +340,7 @@ def destination_maker(origin):
     for i in trs:
         tds = i.find_all('td')
         st.write(type(tds))
-        tds[2] = re.findall(r"\(.\)", tds[2].text)
+        tds[2] = re.findall(r"\([A-Z]+\)", tds[2].text)
         st.write(tds[2])
         if tds[2] in airports['iata_code']:
             flights.loc[flights.shape[0]] = [tds[2],airports[airports['iata_code'] == tds[2]].reset_index(drop=True)['Display Name'][0] ,tds[0].text.replace(" ","")]
