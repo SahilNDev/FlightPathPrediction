@@ -339,8 +339,6 @@ def destination_maker(origin):
     flights = pd.DataFrame(columns = ['iata_code', 'Display Name', 'Flight'])
     for i in trs:
         tds = i.find_all('td')
-        st.write(tds)
-        st.write(tds[2])
         tds[2] = re.findall(r"\(.\)", tds[2].text)
         st.write(tds[2])
         if tds[2] in airports['iata_code']:
