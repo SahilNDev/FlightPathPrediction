@@ -334,7 +334,8 @@ def destination_maker(origin):
     trs = []
     for i in tables:
         trs.extend(i.find_all('tr'))
-    st.write(trs)
+    trs.pop(0)
+    trs.pop(0)
     flights = pd.DataFrame(columns = ['iata_code', 'Display Name', 'Flight'])
     for i in trs:
         tds = i.find_all('td')
