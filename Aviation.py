@@ -368,7 +368,7 @@ add_bg_from_url()
 #st.write(datetime.now(pytz.timezone('Asia/Kolkata')))
 tk = 0
 st.title("Predict Flight Path Between Two Locations :airplane:")
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
     x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
