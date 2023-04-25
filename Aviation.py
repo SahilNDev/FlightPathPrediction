@@ -294,6 +294,7 @@ def main_function(airport1, airport2):
     for i in trs:
         if airport2 in i.text:
             tds = i.find_all('td')
+            st.write(tds)
             flights.append(tds[0].text.replace(" ",""))
     try:
         while True:
