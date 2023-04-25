@@ -344,7 +344,7 @@ def destination_maker(origin):
             st.write(tds[2])
             if tds[2] in airports['iata_code']:
                 flights.loc[flights.shape[0]] = [tds[2],airports[airports['iata_code'] == tds[2]].reset_index(drop=True)['Display Name'][0] ,tds[0].text.replace(" ","")]
-	except Exception:
+        except Exception:
             continue
     return flights
 df = pd.read_csv("in-airports.csv")
