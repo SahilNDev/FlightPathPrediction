@@ -327,7 +327,6 @@ def main_function(airport1, airport2):
 def destination_maker(origin):
     airports = pd.read_csv("in-airports.csv")
     main_url = "https://uk.flightaware.com"
-    st.write(origin)
     url_extract = requests.get(main_url + "/live/airport/{}".format(origin)).text
     soup = BeautifulSoup(url_extract, 'lxml')
     tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
@@ -383,7 +382,8 @@ with col1:
     look_behind = st.slider('Look Behind',5,20, help = "It is the past n data points being used for making the next prediction.")
 with col2:
     dest = destination_maker(x)
-    destination = st.selectbox('Destination: ', tuple(dest['Display Name']))
+    st.write(dest)
+    destination = st.selectbox('Destination: ', set(dest['Display Name']))
     y = dest[dest['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
     look_ahead = st.slider("Look Ahead",1,10, help = "It is the nth future point being predicted, in intervals of 30 seconds.")
 with col3:
