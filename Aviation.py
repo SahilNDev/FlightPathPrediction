@@ -327,6 +327,7 @@ def main_function(airport1, airport2):
 def destination_maker(origin):
     airports = pd.read_csv("in-airports.csv")
     main_url = "https://uk.flightaware.com"
+    st.write(origin)
     url_extract = requests.get(main_url + "/live/airport/{}".format(origin)).text
     soup = BeautifulSoup(url_extract, 'lxml')
     tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
