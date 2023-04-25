@@ -331,6 +331,7 @@ def destination_maker(origin):
     url_extract = requests.get(main_url + "/live/airport/{}".format(origin)).text
     soup = BeautifulSoup(url_extract, 'lxml')
     tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
+    st.write(tables)
     trs = []
     for i in tables:
         trs.extend(i.find_all('tr'))
