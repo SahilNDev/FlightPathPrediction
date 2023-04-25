@@ -331,16 +331,16 @@ def destination_maker(origin):
     url_extract = requests.get(main_url + "/live/airport/{}".format(origin)).text
     soup = BeautifulSoup(url_extract, 'lxml')
     tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
-    st.write(tables)
     trs = []
     for i in tables:
         trs.extend(i.find_all('tr'))
+    st.write(trs)
     flights = pd.DataFrame(columns = ['iata_code', 'Display Name', 'Flight'])
     for i in trs:
         tds = i.find_all('td')
         st.write(tds)
         st.write(tds[2])
-        tds[2] = re.findall(r"\(.\)", tds[2])
+        tds[2] = re.findall(r"\(.\)", tds[2].text)
         st.write(tds[2])
         if tds[2] in airports['iata_code']:
             flights.loc[flights.shape[0]] = [tds[2],airports[airports['iata_code'] == tds[2]].reset_index(drop=True)['Display Name'][0] ,tds[0].text.replace(" ","")]
