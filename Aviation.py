@@ -279,16 +279,13 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
     return x
     
     
-def main_function(airport1, airport2):
+def main_function(airport1, airport2, flight):
     airports = pd.read_csv("in-airports.csv")
     main_url = "https://uk.flightaware.com"
-    url_extract = requests.get(main_url + "/live/airport/{}".format(airport1)).text
     s = airports[airports['gps_code'] == airport1].reset_index(drop = True)['municipality'][0]
     e = airports[airports['iata_code'] == airport2].reset_index(drop = True)['municipality'][0]
-    soup = BeautifulSoup(url_extract, 'lxml')
     try:
         while True:
-            flight = flights[0]
             ulo = main_url + "/live/flight/{}/history".format(flight)
             url_extract = requests.get(ulo).text
             soup = BeautifulSoup(url_extract, 'lxml')
@@ -319,8 +316,6 @@ def main_function(airport1, airport2):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
                 return fileslist,flight,s,e,og
-            else:
-                flights.remove(flight)
     except Exception as ex:
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
         return "", "", "", "", ""
@@ -392,11 +387,9 @@ with col3:
     if st.button('Submit'):
         tk = 1
 if tk == 1:
-    x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
-    y = df[df['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
     placeholder = st.empty()
     placeholder.text("Scraping is going on....")
-    a_list, flight,s,e,og = main_function(x, y)
+    a_list,s,e,og = main_function(x, y. flight)
     if type(a_list) is list:
         placeholder.text("Scraping has been done successfully")
         st.write("Flight in consideration is {}".format(flight))
