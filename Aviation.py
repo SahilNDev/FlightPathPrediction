@@ -335,6 +335,7 @@ def destination_maker(origin):
         trs.extend(i.find_all('tr'))
     trs.pop(0)
     trs.pop(0)
+    data = []
     flights = pd.DataFrame(columns = ['iata_code', 'Display Name', 'Flight'])
     for i in trs:
         tds = i.find_all('td')
@@ -342,9 +343,11 @@ def destination_maker(origin):
             tds[2] = re.findall(r"\([A-Z]+\)", tds[2].text)[0][1:-1]
             st.write(tds[2])
             if tds[2] in airports['iata_code']:
-                flights.loc[0] = [tds[2],airports[airports['iata_code'] == tds[2]].reset_index(drop=True)['Display Name'][0] ,tds[0].text.replace(" ","")]
+                data.append([tds[2],airports[airports['iata_code'] == tds[2]].reset_index(drop=True)['Display Name'][0] ,tds[0].text.replace(" ","")])
         except Exception:
             continue
+    for i in range(len(data)):
+        flights.loc[i] = data[i]
     return flights
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
