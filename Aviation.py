@@ -315,10 +315,10 @@ def main_function(airport1, airport2, flight):
                 for i in range(5):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
-                return fileslist,flight,s,e,og
+                return fileslist,s,e,og
     except Exception as ex:
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
-        return "", "", "", "", ""
+        return "", "", "", ""
 def destination_maker(origin):
     airports = pd.read_csv("in-airports.csv")
     main_url = "https://uk.flightaware.com"
