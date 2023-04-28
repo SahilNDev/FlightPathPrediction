@@ -348,6 +348,8 @@ def destination_maker(origin):
             continue
     for i in range(len(data)):
         flights.loc[i] = data[i]
+    st.write(data)
+    st.write(flights)
     return flights
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
