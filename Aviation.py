@@ -342,7 +342,7 @@ def destination_maker(origin):
         try:
             tds[2] = re.findall(r"\([A-Z]+\)", tds[2].text)[0][1:-1]
             st.write(tds[2])
-            if tds[2] in airports['iata_code']:
+            if tds[2] in airports['iata_code'].array:
                 data.append([tds[2],airports[airports['iata_code'] == tds[2]].reset_index(drop=True)['Display Name'][0] ,tds[0].text.replace(" ","")])
         except Exception:
             continue
