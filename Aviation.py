@@ -389,7 +389,7 @@ with col3:
 if tk == 1:
     placeholder = st.empty()
     placeholder.text("Scraping is going on....")
-    a_list,s,e,og = main_function(x, y. flight)
+    a_list,s,e,og = main_function(x, y, flight)
     if type(a_list) is list:
         placeholder.text("Scraping has been done successfully")
         st.write("Flight in consideration is {}".format(flight))
