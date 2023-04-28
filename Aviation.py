@@ -348,8 +348,6 @@ def destination_maker(origin):
             continue
     for i in range(len(data)):
         flights.loc[i] = data[i]
-    st.write(data)
-    st.write(flights)
     return flights
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
@@ -387,7 +385,6 @@ with col1:
     look_behind = st.slider('Look Behind',5,20, help = "It is the past n data points being used for making the next prediction.")
 with col2:
     dest = destination_maker(x)
-    st.write(dest)
     destination = st.selectbox('Destination: ', set(dest['Display Name']))
     y = dest[dest['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
     look_ahead = st.slider("Look Ahead",1,10, help = "It is the nth future point being predicted, in intervals of 30 seconds.")
