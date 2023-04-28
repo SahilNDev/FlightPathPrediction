@@ -31,6 +31,7 @@ import pytz
 import folium
 from streamlit_folium import st_folium, folium_static
 import streamlit.components.v1 as components
+
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
@@ -41,6 +42,7 @@ def create_dataset(dataset, look_back, look_ahead):
         X.append(a)
         Y.append(dataset[i + look_back + look_ahead - 1, 0])
     return np.array(X), np.array(Y)
+
 def df_creation(flight, file):
     df = pd.read_csv(r'Datasets/{}-{}.csv'.format(flight, file))
     #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
@@ -62,6 +64,7 @@ def df_creation(flight, file):
     df['minute'] = df['date_time'].apply(lambda x: x.minute)
     df['second'] = df['date_time'].apply(lambda x: x.second)
     return df
+
 def model_implementation(files, flight, og, look_back, look_ahead):
     dataframelist = []
     for i in files:
@@ -283,15 +286,6 @@ def main_function(airport1, airport2):
     s = airports[airports['gps_code'] == airport1].reset_index(drop = True)['municipality'][0]
     e = airports[airports['iata_code'] == airport2].reset_index(drop = True)['municipality'][0]
     soup = BeautifulSoup(url_extract, 'lxml')
-    tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
-    trs = []
-    for i in tables:
-        trs.extend(i.find_all('tr'))
-    flights = []
-    for i in trs:
-        if airport2 in i.text:
-            tds = i.find_all('td')
-            flights.append(tds[0].text.replace(" ",""))
     try:
         while True:
             flight = flights[0]
@@ -330,7 +324,28 @@ def main_function(airport1, airport2):
     except Exception as ex:
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
         return "", "", "", "", ""
-    
+def destination_maker(origin):
+    airports = pd.read_csv("in-airports.csv")
+    main_url = "https://uk.flightaware.com"
+    url_extract = requests.get(main_url + "/live/airport/{}".format(origin)).text
+    soup = BeautifulSoup(url_extract, 'lxml')
+    tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
+    trs = []
+    for i in tables:
+        trs.extend(i.find_all('tr'))
+    trs.pop(0)
+    trs.pop(0)
+    flights = pd.DataFrame(columns = ['iata_code', 'Display Name', 'Flight'])
+    for i in trs:
+        tds = i.find_all('td')
+        try:
+            tds[2] = re.findall(r"\([A-Z]+\)", tds[2].text)[0][1:-1]
+            st.write(tds[2])
+            if tds[2] in airports['iata_code']:
+                flights.loc[0] = [tds[2],airports[airports['iata_code'] == tds[2]].reset_index(drop=True)['Display Name'][0] ,tds[0].text.replace(" ","")]
+        except Exception:
+            continue
+    return flights
 df = pd.read_csv("in-airports.csv")
 def add_bg_from_url():
     st.markdown(
@@ -345,25 +360,34 @@ def add_bg_from_url():
          """,
          unsafe_allow_html=True
      )
+
 def ChangeWidgetFontSize(wgt_txt, wch_font_size = '12px'):
     htmlstr = """<script>var elements = window.parent.document.querySelectorAll('p'), i;
                 for (i = 0; i < elements.length; ++i) 
                     { if (elements[i].textContent.includes(|wgt_txt|)) 
                         { elements[i].style.fontSize ='""" + wch_font_size + """'; } }</script>  """
+
     htmlstr = htmlstr.replace('|wgt_txt|', "'" + wgt_txt + "'")
     components.html(f"{htmlstr}", height=0, width=0)
+
 st.set_page_config(layout='wide', page_title="Bird's Eye", page_icon = "https://toppng.com/uploads/preview/transparent-background-airplane-11549404876oivb2vpwwf.png")
 add_bg_from_url()
 #st.write(datetime.now(pytz.timezone('Asia/Kolkata')))
 tk = 0
 st.title("Predict Flight Path Between Two Locations :airplane:")
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 with col1:
     origin = st.selectbox('Origin: ', set(df['Display Name']), index = 0)
+    x = df[df['Display Name'] == origin].reset_index(drop=True)['gps_code'][0]
     look_behind = st.slider('Look Behind',5,20, help = "It is the past n data points being used for making the next prediction.")
 with col2:
-    destination = st.selectbox('Destination: ', tuple(df[df['Display Name']!=origin]['Display Name']))
+    dest = destination_maker(x)
+    st.write(dest)
+    destination = st.selectbox('Destination: ', set(dest['Display Name']))
+    y = dest[dest['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
     look_ahead = st.slider("Look Ahead",1,10, help = "It is the nth future point being predicted, in intervals of 30 seconds.")
+with col3:
+    flight = st.selectbox('Flight: ', tuple(dest[dest['Display Name'] == destination]['Flight']))
     if st.button('Submit'):
         tk = 1
 if tk == 1:
