@@ -369,6 +369,7 @@ def ChangeWidgetFontSize(wgt_txt, wch_font_size = '12px'):
 
 st.set_page_config(layout='wide', page_title="Bird's Eye", page_icon = "https://toppng.com/uploads/preview/transparent-background-airplane-11549404876oivb2vpwwf.png")
 add_bg_from_url()
+st.cache_data.clear()
 #st.write(datetime.now(pytz.timezone('Asia/Kolkata')))
 tk = 0
 st.title("Predict Flight Path Between Two Locations :airplane:")
