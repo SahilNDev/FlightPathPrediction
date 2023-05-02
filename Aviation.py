@@ -435,7 +435,7 @@ if tk == 1:
                 st.pyplot(results[i][-1])
         with tab2:
             st.markdown("<h1>Ongoing Flight:</h1>", unsafe_allow_html=True)
-            if og != None:
+            if len(og_p) > 0:
                 df = pd.read_csv(r"Datasets/{}-{}.csv".format(flight,og))
                 for p in og_p:
                     tab2.write(p)
