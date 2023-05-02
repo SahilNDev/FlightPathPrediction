@@ -381,13 +381,13 @@ with col1:
 with col2:
     dest = destination_maker(x)
     destination = st.selectbox('Destination: ', set(dest['Display Name']))
-    y = dest[dest['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
     look_ahead = st.slider("Look Ahead",1,10, help = "It is the nth future point being predicted, in intervals of 30 seconds.")
 with col3:
     flight = st.selectbox('Flight: ', tuple(dest[dest['Display Name'] == destination]['Flight']))
     if st.button('Submit'):
         tk = 1
 if tk == 1:
+     y = dest[dest['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
     placeholder = st.empty()
     placeholder.text("Scraping is going on....")
     a_list,s,e,og = main_function(x, y, flight)
