@@ -136,7 +136,7 @@ def model_implementation(files, flight, og, look_back, look_ahead):
         plt.legend(fontsize=10)
         arr.append(fig1)
         units_dict[i] = arr
-        if og != None:
+        if og != None or og.shape[0] > look_back:
              og_lat=og_df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
              og_dataset =og_lat[i].values #numpy.ndarray
              og_dataset = og_dataset.astype('float32')
@@ -387,7 +387,7 @@ with col3:
     if st.button('Submit'):
         tk = 1
 if tk == 1:
-     y = dest[dest['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
+    y = dest[dest['Display Name'] == destination].reset_index(drop=True)['iata_code'][0]
     placeholder = st.empty()
     placeholder.text("Scraping is going on....")
     a_list,s,e,og = main_function(x, y, flight)
