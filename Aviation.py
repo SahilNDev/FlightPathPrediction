@@ -136,7 +136,7 @@ def model_implementation(files, flight, og, look_back, look_ahead):
         plt.legend(fontsize=10)
         arr.append(fig1)
         units_dict[i] = arr
-        if og != None or og.shape[0] > look_back:
+        if og != None or og_df.shape[0] > look_back:
              og_lat=og_df.loc[:,['date_time',i, 'day', 'hour','minute','second', 'Course', 'tilt']]
              og_dataset =og_lat[i].values #numpy.ndarray
              og_dataset = og_dataset.astype('float32')
