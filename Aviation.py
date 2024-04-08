@@ -32,6 +32,10 @@ import folium
 from streamlit_folium import st_folium, folium_static
 import streamlit.components.v1 as components
 
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 11; SAMSUNG SM-G973U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/14.2 Chrome/87.0.4280.141 Mobile Safari/537.36',
+}
+
 def get_download_link(file, x, type):
     b64 = base64.b64encode(file.encode()).decode()  # some strings <-> bytes conversions necessary here
     return f'<a href="data:file/{type};base64,{b64}" download = "{x}.{type}">Download {type.upper()} file of {x}</a>'
@@ -218,7 +222,7 @@ def get_point_at_distance(lat1, lon1, alt1, d, bearing, tilt, R=6371):
     
     return (degrees(lat2), degrees(lon2), alt2, )
 def scraping_function(url, s_elevation, e_elevation, flight, s, e):
-    url_extract = requests.get(url).text
+    url_extract = requests.get(url, headers=headers).text
     soup = BeautifulSoup(url_extract, 'lxml')
     table = soup.find('table', class_ = "prettyTable fullWidth")
     header = table.find('tr', class_ = "thirdHeader")
@@ -287,7 +291,7 @@ def main_function(airport1, airport2, flight):
     try:
         while True:
             ulo = main_url + "/live/flight/{}/history".format(flight)
-            url_extract = requests.get(ulo).text
+            url_extract = requests.get(ulo, headers = headers).text
             soup = BeautifulSoup(url_extract, 'lxml')
             new_table = soup.find('table', class_ = "prettyTable fullWidth tablesaw tablesaw-stack")
             table_body = new_table.find_all('tr')[1:]
@@ -322,7 +326,7 @@ def main_function(airport1, airport2, flight):
 def destination_maker(origin):
     airports = pd.read_csv("in-airports.csv")
     main_url = "https://uk.flightaware.com"
-    url_extract = requests.get(main_url + "/live/airport/{}".format(origin)).text
+    url_extract = requests.get(main_url + "/live/airport/{}".format(origin), headers = headers).text
     soup = BeautifulSoup(url_extract, 'lxml')
     tables = soup.find_all('div', class_ ="airportBoardContainer")[1::2]
     trs = []
