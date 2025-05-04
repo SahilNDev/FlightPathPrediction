@@ -50,7 +50,7 @@ def create_dataset(dataset, look_back, look_ahead):
 def df_creation(flight, file):
     df = pd.read_csv(r'Datasets/{}-{}.csv'.format(flight, file))
     #df_new = df_new.dropna(subset=['Time (IST)']).reset_index(drop=True)
-    daylist = np.array(df['Time (IST)'])
+    daylist = np.array(df['Time (EDT)'])
     strday = daylist[0][:3]
     df['date_time'] = np.nan
     for j in range(df.shape[0]):
