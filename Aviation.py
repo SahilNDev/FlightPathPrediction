@@ -117,7 +117,7 @@ def model_implementation(files, flight, og, look_back, look_ahead):
         predicted_df[i] = np.append(pr, test_predict[:,0])
         arr.append(f'Train Mean Absolute Error for {i}: {mean_absolute_error(Y_train[0], train_predict[:,0])}')
         arr.append(f'Train Root Mean Squared Error for {i}: {np.sqrt(mean_squared_error(Y_train[0], train_predict[:,0]))}')
-	arr.append(f'Test R Squared Score for {i}: {r2_score(Y_test[0], test_predict[:,0])}')
+	arr.append(f'Train R Squared Score for {i}: {r2_score(Y_train[0], train_predict[:,0])}')
         arr.append(f'Test Mean Absolute Error for {i}: {mean_absolute_error(Y_test[0], test_predict[:,0])}')
         arr.append(f'Test Root Mean Squared Error for {i}: {np.sqrt(mean_squared_error(Y_test[0], test_predict[:,0]))}')
 	arr.append(f'Test R Squared Score for {i}: {r2_score(Y_test[0], test_predict[:,0])}')
