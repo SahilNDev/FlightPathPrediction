@@ -323,6 +323,7 @@ def main_function(airport1, airport2, flight):
                     fileslist.insert(0, file)
                 return fileslist,s,e,og
     except Exception as ex:
+        st.write(ex)
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
         return "", "", "", ""
 def destination_maker(origin):
