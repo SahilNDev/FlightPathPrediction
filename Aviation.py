@@ -270,7 +270,6 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
         except Exception:
             break
     header_csv.extend(['Time Diff', 'm/s', 'Dist from lp', 'tilt'])
-    st.write(data_csv, "the data")
     data_csv[0].extend([0,mph_to_mps(data_csv[0][5]), 0,0])
     df = pd.DataFrame(columns = header_csv)
     for i in range(1, len(data_csv)):
@@ -308,7 +307,6 @@ def main_function(airport1, airport2, flight):
             og = None
             if airport1 in table_body[0].text and airport2 in table_body[0].text and 'On The Way!' in table_body[0].text:
                 x = re.findall(r'a href="[/a-zA-Z0-9]+', str(table_body[0]))[0][8:]
-                st.write(main_url+x+"/tracklog")
                 og = scraping_function(main_url+x+"/tracklog",elevation1,elevation2,flight,s,e)
             table_body.pop(0)
             flight_links = []
@@ -316,17 +314,18 @@ def main_function(airport1, airport2, flight):
                 if airport1 in i.text and airport2 in i.text and 'Cancelled' not in i.text:
                     x = re.findall(r'a href="[/a-zA-Z0-9]+', str(i))[0][8:]
                     flight_links.append(x)
-                    if len(flight_links) == 5:
-                        break
-            if len(flight_links) == 5:
-                fileslist = []
-                for i in range(5):
-                    st.write(main_url+flight_links[i]+"/tracklog")
+            fileslist = []
+            num = 0
+            while num < 5:
+                st.write(main_url+flight_links[i]+"/tracklog")
+		try:
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
-                return fileslist,s,e,og
+		    num += 1
+		except Exception as ex:
+		    pass
+            return fileslist,s,e,og
     except Exception as ex:
-        st.write(ex)
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
         return "", "", "", ""
 def destination_maker(origin):
