@@ -308,6 +308,7 @@ def main_function(airport1, airport2, flight):
             og = None
             if airport1 in table_body[0].text and airport2 in table_body[0].text and 'On The Way!' in table_body[0].text:
                 x = re.findall(r'a href="[/a-zA-Z0-9]+', str(table_body[0]))[0][8:]
+                st.write(main_url+x+"/tracklog")
                 og = scraping_function(main_url+x+"/tracklog",elevation1,elevation2,flight,s,e)
             table_body.pop(0)
             flight_links = []
@@ -320,6 +321,7 @@ def main_function(airport1, airport2, flight):
             if len(flight_links) == 5:
                 fileslist = []
                 for i in range(5):
+                    st.write(main_url+flight_links[i]+"/tracklog")
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
                 return fileslist,s,e,og
