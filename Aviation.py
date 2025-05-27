@@ -315,18 +315,17 @@ def main_function(airport1, airport2, flight):
                     x = re.findall(r'a href="[/a-zA-Z0-9]+', str(i))[0][8:]
                     flight_links.append(x)
             fileslist = []
-            num = 0
-	    i = -1
+            num, i = 0, 0
             while num < 5:
                 st.write(main_url+flight_links[i]+"/tracklog")
                 try:
-	            i += 1
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
                     num += 1
                 except Exception as err:
                     st.write(err)
                     continue
+                i += 1
             return fileslist,s,e,og
     except Exception as ex:
         st.write(ex)
