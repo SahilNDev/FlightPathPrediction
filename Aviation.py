@@ -270,7 +270,8 @@ def scraping_function(url, s_elevation, e_elevation, flight, s, e):
         except Exception:
             break
     header_csv.extend(['Time Diff', 'm/s', 'Dist from lp', 'tilt'])
-    st.write(data_csv[0])
+    st.write(data_csv)
+    print(data_csv)
     data_csv[0].extend([0,mph_to_mps(data_csv[0][5]), 0,0])
     df = pd.DataFrame(columns = header_csv)
     for i in range(1, len(data_csv)):
