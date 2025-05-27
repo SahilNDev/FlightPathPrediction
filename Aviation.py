@@ -324,7 +324,6 @@ def main_function(airport1, airport2, flight):
                     num += 1
                 except Exception as err:
                     st.write(err)
-                    continue
                 i += 1
             return fileslist,s,e,og
     except Exception as ex:
