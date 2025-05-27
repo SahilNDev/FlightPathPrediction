@@ -322,10 +322,12 @@ def main_function(airport1, airport2, flight):
                     file = scraping_function(main_url+flight_links[i]+"/tracklog", elevation1, elevation2, flight,s,e)
                     fileslist.insert(0, file)
                     num += 1
-                except Exception as ex:
+                except Exception as err:
+                    st.write(err)
                     continue
             return fileslist,s,e,og
     except Exception as ex:
+	st.write(ex)
         st.write(f"No flights are there between {s} and {e}, change the locations and try again.")
         return "", "", "", ""
 def destination_maker(origin):
